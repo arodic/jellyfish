@@ -55,6 +55,9 @@ function createProgram(fragmentShaderID, vertexShaderID) {
   program.textureCoordAttribute = gl.getAttribLocation(program,     "aTextureCoord");
   gl.enableVertexAttribArray(program.textureCoordAttribute);
   
+  program.skinWeightAttribute = gl.getAttribLocation(program,     "aSkinWeight");
+  gl.enableVertexAttribArray(program.skinWeightAttribute);
+  
   program.world = gl.getUniformLocation(program,              "uWorld");
   program.worldView = gl.getUniformLocation(program,          "uWorldView");
   program.worldViewProj = gl.getUniformLocation(program,      "uWorldViewProj");
@@ -65,33 +68,15 @@ function createProgram(fragmentShaderID, vertexShaderID) {
   program.sampler[0] = gl.getUniformLocation(program,           "uSampler0");
   program.sampler[1] = gl.getUniformLocation(program,           "uSampler1");
   program.sampler[2] = gl.getUniformLocation(program,           "uSampler2");
-  program.sampler[3] = gl.getUniformLocation(program,           "uSampler3");
-  
+
   program.joint0 = gl.getUniformLocation(program,             "uJoint0");
   program.joint1 = gl.getUniformLocation(program,             "uJoint1");
   program.joint2 = gl.getUniformLocation(program,             "uJoint2");
   program.joint3 = gl.getUniformLocation(program,             "uJoint3");
-  program.joint0InvTranspose = gl.getUniformLocation(program,             "uJoint0InvTranspose");
-  program.joint1InvTranspose = gl.getUniformLocation(program,             "uJoint1InvTranspose");
-  program.joint2InvTranspose = gl.getUniformLocation(program,             "uJoint2InvTranspose");
-  program.joint3InvTranspose = gl.getUniformLocation(program,             "uJoint3InvTranspose");
+  program.joint0InvTranspose = gl.getUniformLocation(program, "uJoint0InvTranspose");
 
   program.currentTime = gl.getUniformLocation(program,          "uCurrentTime");
   program.currentJellyfishTime = gl.getUniformLocation(program, "uCurrentJellyfishTime");
-  
-  program.near = gl.getUniformLocation(program,               "uNear");
-  program.far = gl.getUniformLocation(program,                "uFar");
-  program.alpha = gl.getUniformLocation(program,              "uAlpha");
-  
-  program.lightPos = gl.getUniformLocation(program,           "uLightPos");
-  program.lightCol = gl.getUniformLocation(program,           "uLightCol");
-  program.ambientCol = gl.getUniformLocation(program,         "uAmbientCol");
-  program.fogDist = gl.getUniformLocation(program,            "uFogDist");
-  program.fogTopCol = gl.getUniformLocation(program,          "uFogTopCol");
-  program.fogBottomCol = gl.getUniformLocation(program,       "uFogBottomCol");
-  program.fresnelCol = gl.getUniformLocation(program,         "uFresnelCol");
-  program.fresnelPow = gl.getUniformLocation(program,         "uFresnelPower");  
-  program.shaderDebug = gl.getUniformLocation(program,        "uShaderDebug");
  
   return program;
 }
@@ -103,8 +88,8 @@ function initShaders() {
   shaderProgram["jellyfish"] = createProgram("jellyfish-fs", "jellyfish-vs");
   currentProgram = shaderProgram["jellyfish"];
   setShader("jellyfish");
-  bindTexture('jellyfishColor', 0);
-  bindTexture('jellyfishAlpha', 2);
+  bindTexture('jellyfish', 0);
+  bindTexture('luminescence', 2);
   bindTexture('caustics'+localParam.cycle32, 1);
 
 }
@@ -112,6 +97,4 @@ function initShaders() {
 function setShader(name){
   currentProgram = shaderProgram[name];
   gl.useProgram(currentProgram);
-  //TODO:remove
-  setDebugUniforms();
 }

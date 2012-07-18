@@ -29,9 +29,10 @@ function webGLStart() {
   canvas = document.getElementById("webgl-canvas");
 
   initWin();
+  initBuffers();
   initShaders();
   initTextures();
-  initBuffers();
+
   setDebugParam();
   
   gl.clearColor(0., 0., 0., 0.);

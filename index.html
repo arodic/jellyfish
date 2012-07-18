@@ -21,36 +21,26 @@
 
 
 <script id="jellyfish-vs" type="x-shader/x-vertex">
+precision mediump float;
 
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 attribute vec3 aVertexColor;
 attribute vec3 aTextureCoord;
+attribute vec4 aSkinWeight;
 
 uniform mat4 uWorld;
 uniform mat4 uViewInv;
 uniform mat4 uWorldView;
 uniform mat4 uWorldViewProj;
 
-uniform float uNear;
-uniform float uFar;
-uniform vec3 uLightPos;
-uniform vec4 uLightCol;
-uniform vec4 uAmbientCol;
-uniform vec4 uFresnelCol;
-uniform float uFresnelPower;
-
 uniform float uCurrentTime;
-
 
 uniform mat4 uJoint0;
 uniform mat4 uJoint1;
 uniform mat4 uJoint2;
 uniform mat4 uJoint3;
 uniform mat4 uJoint0InvTranspose;
-uniform mat4 uJoint1InvTranspose;
-uniform mat4 uJoint2InvTranspose;
-uniform mat4 uJoint3InvTranspose;
 
 uniform float uCurrentJellyfishTime;
 
@@ -58,7 +48,6 @@ varying vec4 vWorld;
 
 varying vec3 vTextureCoord;
 varying vec3 vDiffuse;
-varying vec3 vAmbient;
 varying vec3 vFresnel;
 
 
@@ -68,34 +57,19 @@ void main(void) {
   float dpi = 6.2831853;
   float pi = 3.14159265;
   float hpi = 1.570796325;
-  float lenght = 1.50;
-  float time = mod((uCurrentJellyfishTime+aVertexPosition.y*lenght), dpi);
-  float time2 = mod((uCurrentJellyfishTime+aVertexPosition.y*lenght), dpi);
-
-  if (time < hpi) time = time;
-  else if (time < pi) time = hpi;
-  else if (time < 3.0*hpi) time = (time*2.0-3.0*hpi);
+  float time = mod(uCurrentJellyfishTime+aVertexPosition.y, dpi);
 
   float offset = smoothstep(0.0,1.,max(0.,-aVertexPosition.y-0.8)/10.);
-  vec3 anim = (vec3(aVertexColor.x,aVertexColor.y,aVertexColor.z)/8.0*sin((time+time2)/2.0) * (1.-offset));
+
+  vec3 anim = (vec3(aVertexColor.x,aVertexColor.y,aVertexColor.z)/8.0*sin(time) * (1.-offset));
   vec3 pos = aVertexPosition + anim;
 
-  vec3 nrm = aVertexNormal;
-
   //skinning
-  float weight = -aVertexPosition.y/3.0;
-  float w0 = max(min(-weight+1.0,1.0),0.0);
-  float w1 = max(min(weight,-weight+2.0),0.0);
-  float w2 = max(min(weight-1.0,-weight+3.0),0.0);
-  float w3 = max(min(weight-2.0,1.0),0.0);
-  pos = vec3(uJoint0 * vec4(pos, 1.0))*w0 +
-				vec3(uJoint1 * vec4(pos, 1.0))*w1 +
-				vec3(uJoint2 * vec4(pos, 1.0))*w2 +
-				vec3(uJoint3 * vec4(pos, 1.0))*w3;
-  nrm = vec3(uJoint0InvTranspose * vec4(nrm, 1.0))*w0 +
-				vec3(uJoint1InvTranspose * vec4(nrm, 1.0))*w1 +
-				vec3(uJoint2InvTranspose * vec4(nrm, 1.0))*w2 +
-				vec3(uJoint3InvTranspose * vec4(nrm, 1.0))*w3;
+  pos = vec3(uJoint0 * vec4(pos, 1.0))*aSkinWeight.x +
+				vec3(uJoint1 * vec4(pos, 1.0))*aSkinWeight.y +
+				vec3(uJoint2 * vec4(pos, 1.0))*aSkinWeight.z +
+				vec3(uJoint3 * vec4(pos, 1.0))*aSkinWeight.w;
+  vec3 nrm = vec3(uJoint0InvTranspose * vec4(aVertexNormal, 1.0));
 
   //matrices
   vWorld =               uWorld * vec4(pos, 1.0);
@@ -108,60 +82,44 @@ void main(void) {
   vec3 WorldEyeVec = normalize(vWorld.xyz - uViewInv[3].xyz);
 
   //diffuse
-  vec3 lightDir = normalize(uLightPos);
+  vec3 lightDir = vec3(0.0,1.0,0.0);
+  vec3 lightCol = vec3(0.6,0.4,0.1);
+  vec3 ambientCol = vec3(0.5,0.2,0.1);
   float diffuseProduct = max(dot(normalize(VertexNormal.xyz), lightDir), 0.0);
-  vDiffuse = uLightCol.rgb * vec3(diffuseProduct * uLightCol.a);
+  vDiffuse = lightCol * vec3(diffuseProduct) + ambientCol;
 
   //fresnel
-  float fresnelProduct = pow(1.0-max(abs(dot(VertexNormal, -WorldEyeVec)), 0.0), uFresnelPower);
-  vFresnel = uFresnelCol.rgb * vec3(uFresnelCol.a * fresnelProduct);
-
+  vec3 fresnelColor = vec3(0.2,0.5,0.6);
+  float fresnelProduct = pow(1.0-max(abs(dot(VertexNormal, -WorldEyeVec)), 0.0), 2.0);
+  vFresnel = fresnelColor * vec3(fresnelProduct);
 
 	//texture coords
   vTextureCoord = aTextureCoord;
-
-  //ambient color
-  vAmbient = uAmbientCol.rgb * uAmbientCol.a;
 
   gl_Position = WorldViewProj;
 }
 </script>
 
 <script id="jellyfish-fs" type="x-shader/x-fragment">
-#ifdef GL_ES
-precision highp float;
-#endif
+precision mediump float;
 
 uniform sampler2D uSampler0;
 uniform sampler2D uSampler1;
 uniform sampler2D uSampler2;
 
-uniform float uShaderDebug;
-uniform float uAlpha;
-
 uniform float uCurrentTime;
-
-uniform float uCurrentJellyfishTime;
 
 varying vec4 vWorld;
 
 varying vec3 vTextureCoord;
 varying vec3 vDiffuse;
-varying vec3 vAmbient;
 varying vec3 vFresnel;
 
 void main(void) {
   vec3 caustics = texture2D(uSampler1, vec2((vWorld.x)/48.+uCurrentTime/12., (vWorld.z-vWorld.y)/95.)).rgb;
-  vec3 colorMap = pow(texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t)).rgb,vec3(2.2));
-  float alphaMap = 1.0-texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t)).r*uAlpha;
+  vec4 colorMap = texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t));
 
-  caustics *= 1.;
-
-  vec4 composit = vec4(((vAmbient + vDiffuse + caustics)*colorMap.rgb) + vFresnel, alphaMap*0.9);
-
-  composit = vec4(composit.rgb, composit.a*0.8);
-
-  gl_FragColor = composit;
+  gl_FragColor = vec4(((vDiffuse + caustics)*colorMap.rgb) + vFresnel, colorMap.a);
 }
 </script>
   
@@ -176,19 +134,7 @@ $(document).ready(function(){
     <div id="statusBar">
         Frame rate: <span id="frameRate">NaN</span>
     </div>
-    <div id="console" style="display:none;">
-       <div class="console-field" id="debugShader">
-          <b>shader debug</b>
-            <input type="radio" name="shaderDebug" value="0" /> composit <br/>
-            <input type="radio" name="shaderDebug" value="1" /> diffuse <br/>
-            <input type="radio" name="shaderDebug" value="2" /> ambient<br/>
-            <input type="radio" name="shaderDebug" value="3" /> caustics <br/>
-            <input type="radio" name="shaderDebug" value="4" /> color <br/>
-            <input type="radio" name="shaderDebug" value="6" /> fresnel <br/>
-            <input type="radio" name="shaderDebug" value="7" /> normal <br/>
-            <input type="radio" name="shaderDebug" value="8" /> alpha <br/>
-            <input type="radio" name="shaderDebug" value="9" /> key <br/>
-        </div>
+    <div id="console">
        <div class="console-field" id="debugJellyfish">
           <b>jellyfish debug</b>
             <span class="input-section">count</span>
@@ -203,24 +149,6 @@ $(document).ready(function(){
         </div>
 
         <div class="console-field" id="debugLighting">
-          <b>Directional light</b>
-            <span class="input-section">position</span>
-            <input type="text" class="textboxDebug" id="lightX" />
-            <input type="text" class="textboxDebug" id="lightY" />
-            <input type="text" class="textboxDebug" id="lightZ" /><br />
-            <span class="input-section">color</span>
-            <input type="text" class="textboxDebug" id="lightR" />
-            <input type="text" class="textboxDebug" id="lightG" />
-            <input type="text" class="textboxDebug" id="lightB" />
-            <input type="text" class="textboxDebug" id="lightA" /><br />
-            <span class="input-section">radius</span>
-            <input type="text" class="textboxDebug" id="lightRadius" /><br />
-          <b>Ambient light</b>
-            <span class="input-section">color</span>
-            <input type="text"  class="textboxDebug" id="ambientR" />
-            <input type="text"  class="textboxDebug" id="ambientG" />
-            <input type="text"  class="textboxDebug" id="ambientB" />
-            <input type="text"  class="textboxDebug" id="ambientA" />
           <b>fresnel</b>
             <span class="input-section">color</span>
             <input type="text"  class="textboxDebug" id="fresnelR" />

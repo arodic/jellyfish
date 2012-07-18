@@ -43,8 +43,8 @@ function interpolateTargets(){
 function drawJellyfish(){
   interpolateTargets();
   setMatrixUniforms();
-  bindTexture('jellyfishColor', 0);
-  bindTexture('jellyfishAlpha', 2);
+  bindTexture('jellyfish', 0);
+  bindTexture('luminescence', 2);
   bindTexture('caustics'+localParam.cycle32, 1);
   jellyfish.order.sort(sort3D);
   for (var i=0; i < jellyfish.count; i++) {
@@ -70,9 +70,9 @@ function JellyfishInstance(pos,scl,time){
   this.propel = 1;
 
   this.s = {};
-  this.s[0] = new Spring3D(pos[0],pos[1]-6,pos[2]);
+  this.s[0] = new Spring3D(pos[0],pos[1]-1,pos[2]);
   for (j=1;j<=3;j++){
-    this.s[j] = new Spring3D(pos[0],pos[1]-6-3*j*this.scl,pos[2]);
+    this.s[j] = new Spring3D(pos[0],pos[1]-1-1*j*this.scl,pos[2]);
   }
 
   this.draw = function(){
@@ -91,7 +91,7 @@ function JellyfishInstance(pos,scl,time){
   this.simulate = function(){
     this.s[0].spring = 1.295 * this.scl * (2-this.propel);
     this.s[0].update(this.pos);
-    this.s[0].gravity = -0.05;
+    this.s[0].gravity = -0.01;
 
     M4x4.makeTranslate(this.s[0].pos,joint0);
     M4x4.mul(joint0,this.s[0].lookat,joint0);
@@ -100,7 +100,7 @@ function JellyfishInstance(pos,scl,time){
     for (j=1;j<=3;j++){
       this.s[j].spring = 2.95 * this.scl;
       this.s[j].update(this.s[j-1].pos);
-      this.s[j].gravity = -0.03;
+      this.s[j].gravity = -0.02;
       if (j==1){
         M4x4.makeTranslate(this.s[j].pos,joint1);
         M4x4.mul(joint1,this.s[j].lookat, joint1);
@@ -154,15 +154,5 @@ function Spring3D(xpos, ypos, zpos){
 
     M4x4.makeLookAt(this.pos,target,localParam.camera.eye,this.lookat);
   };
-
-  this.repel = function(){
-    for(var i=0; i < jellyfish.count; i++){
-      var dist = V3.sub(this.pos, jellyfish[i].pos);
-      if (V3.length(dist) < 32){
-        var force = V3.scale(dist, 12/Math.pow(V3.length(dist),3));
-        V3.add(this.pos, force, this.pos);
-      }
-    }
-  }
 
 }

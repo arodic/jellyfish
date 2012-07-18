@@ -3,8 +3,8 @@ var texture = {};
 var textureOK = {};
 
 function initTextures() {
-  loadTexture('jellyfishColor', 'images/jellyfishColor.jpg');
-  loadTexture('jellyfishAlpha', 'images/jellyfishAlpha.jpg');
+  loadTexture('jellyfish', 'images/jellyfish.png');
+  loadTexture('luminescence', 'images/luminescence.png');
 
   for (var i=1; i <= 32; i++) {
     loadTexture('caustics'+i, 'images/caustics/caustics7.'+pad2(i-1)+'.jpg');

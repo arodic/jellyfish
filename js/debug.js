@@ -28,11 +28,11 @@ function Param(){
   this.jCount = 5;
   this.jScale = 4;
   this.jScaleRandom = 0;
-  this.jTurb = 0.08;
+  this.jTurb = 0.04;
   this.jSpeed = 0.02;
 
   //particle
-  this.pBbox = [30,30,20];
+  this.pBbox = [80,80,80];
   this.pFlow = [0,-0.01,0];
   this.pTurbAmp = 0.03;
   this.pTurbFreq = 1;

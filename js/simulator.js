@@ -31,7 +31,7 @@ function simulate(){
   if(jellyfishTargets.count<Param.jCount){
     jellyfishTargets[jellyfishTargets.count] = new JellyfishTarget(
       Math.random(i)*2*Param.pBbox[0]-Param.pBbox[0],
-      Math.random(i)*2*Param.pBbox[1]-Param.pBbox[1],
+      Math.random(i)*2*Param.pBbox[1]-Param.pBbox[1]-40,
       Math.random(i)*2*Param.pBbox[2]-Param.pBbox[2],
       Math.random(i)*Param.jScaleRandom+Param.jScale,
       jellyfishTargets.count,
@@ -72,12 +72,12 @@ function simulate(){
 	//REPEL
     for(var j=0; j < jellyfishTargets.count; j++){
 		  if (i != j){
-			  s1 = jellyfishTargets[i].scl*3;
-		    s2 = jellyfishTargets[j].scl*3;
+			  s1 = jellyfishTargets[i].scl*4;
+		    s2 = jellyfishTargets[j].scl*4;
         delta = V3.sub(jellyfishTargets[i].pos, jellyfishTargets[j].pos);
 		    dist = V3.length(delta);// - (jellyfishTargets[i].scl+jellyfishTargets[j].scl)*6;
 		    dir = V3.normalize(delta);
-        if (dist < 4+s1+s2){
+        if (dist < 12+s1+s2){
 	  	    force = V3.scale(dir,Math.pow(Math.max(0,(4-dist+s1+s2)),3)*0.25);
           V3.add(jellyfishTargets[i].pos, force, jellyfishTargets[i].pos);
         }

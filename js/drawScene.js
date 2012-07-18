@@ -18,6 +18,8 @@ function drawScene() {
     readDebugParam();
     simulate();
     drawJellyfish();
+
+    gl.flush();
 }
 
 

@@ -32,17 +32,18 @@ a {
   position:absolute;
   z-index:0;
 }
-#statusBar{
+#statusBar, #statusBar span{
   width:100%;
+  font-size:16px;
   position:absolute;
   z-index:3;
   background:#333;
-  padding:5px 0;
+  padding:5px 10px;
   border-bottom:1px solid #fff;
 }
 #console{
   position:absolute;
-  top:25px;
+  top:35px;
   min-width:265px;
   overflow-y:auto;
   overflow-x:hidden;
@@ -51,7 +52,7 @@ a {
 }
 #info{
   position:absolute;
-  font-size:14px;
+  font-size:16px;
   top:40%;
   left:50%;
   margin:auto;

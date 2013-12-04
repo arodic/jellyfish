@@ -29,7 +29,7 @@ a {
 }
 #console{
   position:absolute;
-  top:35px;
+  top:0px;
   min-width:265px;
   overflow-y:auto;
   overflow-x:hidden;

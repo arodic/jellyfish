@@ -1,5 +1,5 @@
 // JavaScript Document
-// Original code by Evgeny Demidov
+// Original code by egeny Demidov
 // http://www.ibiblio.org/e-notes/webgl/gpu/n-toy.html
 
 var drag = 0;
@@ -12,33 +12,33 @@ var tzOffs = 0;
 var mouseXY = V3.$(0,0,0);
 
 function interact(){
-  canvas.onmousedown = function ( ev ){
+  canvas.onmousedown = function ( e ){
     drag  = 1;
-    rxOffs = ev.clientX/100 - localParam.camera.rotate[1];
-    ryOffs = ev.clientY/100 - localParam.camera.rotate[0];
-    txOffs = +ev.clientX/10 - localParam.camera.translate[0];
-    tyOffs = +ev.clientY/10 - localParam.camera.translate[1];
-    tzOffs = +ev.clientY/10 +ev.clientX/10 - localParam.camera.translate[2];
+    rxOffs = e.clientX/100 - localParam.camera.rotate[1];
+    ryOffs = e.clientY/100 - localParam.camera.rotate[0];
+    txOffs = +e.clientX/10 - localParam.camera.translate[0];
+    tyOffs = +e.clientY/10 - localParam.camera.translate[1];
+    tzOffs = +e.clientY/10 +e.clientX/10 - localParam.camera.translate[2];
   }
-  canvas.onmouseup = function ( ev ){
+  canvas.onmouseup = function ( e ){
     drag  = 0;
-    rxOffs = ev.clientX/100;
-    ryOffs = ev.clientY/100;
-    txOffs = +ev.clientX/10;
-    tyOffs = +ev.clientY/10;
-    tzOffs = +ev.clientY/10 +ev.clientX/10;
+    rxOffs = e.clientX/100;
+    ryOffs = e.clientY/100;
+    txOffs = +e.clientX/10;
+    tyOffs = +e.clientY/10;
+    tzOffs = +e.clientY/10 +e.clientX/10;
   }
-  canvas.onmousemove = function ( ev ){
+  canvas.onmousemove = function ( e ){
 
    if ( drag == 0 ) return;
-   if ( ev.altKey ) {
-      localParam.camera.translate[2] = +ev.clientY/10 +ev.clientX/10 - tzOffs;}
-   else if ( ev.shiftKey ) {
-      localParam.camera.translate[0] = ev.clientX/10 - txOffs;
-      localParam.camera.translate[1] = ev.clientY/10 - tyOffs;         
+   if ( e.altKey ) {
+      localParam.camera.translate[2] = +e.clientY/10 +e.clientX/10 - tzOffs;}
+   else if ( e.shiftKey ) {
+      localParam.camera.translate[0] = e.clientX/10 - txOffs;
+      localParam.camera.translate[1] = e.clientY/10 - tyOffs;         
    } else {
-      localParam.camera.rotate[1] = (ev.clientX/100 - rxOffs);
-      localParam.camera.rotate[0] = (ev.clientY/100 - ryOffs);
+      localParam.camera.rotate[1] = (e.clientX/100 - rxOffs);
+      localParam.camera.rotate[0] = (e.clientY/100 - ryOffs);
    }
   }
 }

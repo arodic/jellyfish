@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Chrysaora - WebGL</title>
+<title>WebGL Jellyfish - Fourth Wall Demo</title>
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="js/lib/mjs.js"></script>
@@ -65,9 +65,9 @@ void main(void) {
 
   //skinning
   pos = vec3(uJoint0 * vec4(pos, 1.0))*aSkinWeight.x +
-				vec3(uJoint1 * vec4(pos, 1.0))*aSkinWeight.y +
-				vec3(uJoint2 * vec4(pos, 1.0))*aSkinWeight.z +
-				vec3(uJoint3 * vec4(pos, 1.0))*aSkinWeight.w;
+  vec3(uJoint1 * vec4(pos, 1.0))*aSkinWeight.y +
+  vec3(uJoint2 * vec4(pos, 1.0))*aSkinWeight.z +
+  vec3(uJoint3 * vec4(pos, 1.0))*aSkinWeight.w;
   vec3 nrm = vec3(uJoint0InvTranspose * vec4(aVertexNormal, 1.0));
 
   //matrices
@@ -121,7 +121,7 @@ void main(void) {
   gl_FragColor = vec4(((vDiffuse + caustics)*colorMap.rgb) + vFresnel, colorMap.a);
 }
 </script>
-  
+
 <script type="text/javascript">
 $(document).ready(function(){
   webGLStart();
@@ -130,43 +130,21 @@ $(document).ready(function(){
 
 </head>
 <body>
-    <div id="statusBar">
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://aleksandarrodic.com/p/jellyfish/" data-text="Interact with beautiful jellyfish in your browser!" data-via="xyz_ak" data-hashtags="WebGL">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<a href="https://twitter.com/xyz_ak" class="twitter-follow-button" data-show-count="false">Follow @xyz_ak</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-    </div>
-    <div id="console">
-       <div class="console-field" id="debugJellyfish">
-          <b>jellyfish debug</b>
-            Frame rate: <span id="frameRate">NaN</span><br />
-          
-            <span class="input-section">count</span>
-            <input type="text" class="textboxDebug" id="jCount" /><br />
-            <span class="input-section">size</span>
-            <input type="text" class="textboxDebug" id="jScale" />
-            <input type="text" class="textboxDebug" id="jScaleRandom"  /><br />
-            <span class="input-section">Turbulence</span>
-            <input type="text" class="textboxDebug" id="jTurb" /><br />
-            <span class="input-section">speed</span>
-            <input type="text" class="textboxDebug" id="jSpeed" /><br />
-        </div>
-    </div>
-    <canvas id="webgl-canvas"></canvas>
-
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-258449-15']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-
+  <div id="console">
+   <div class="console-field" id="debugJellyfish">
+    <b>jellyfish debug</b>
+    Frame rate: <span id="frameRate">NaN</span><br />
+    <span class="input-section">count</span>
+    <input type="text" class="textboxDebug" id="jCount" /><br />
+    <span class="input-section">size</span>
+    <input type="text" class="textboxDebug" id="jScale" />
+    <input type="text" class="textboxDebug" id="jScaleRandom"  /><br />
+    <span class="input-section">Turbulence</span>
+    <input type="text" class="textboxDebug" id="jTurb" /><br />
+    <span class="input-section">speed</span>
+    <input type="text" class="textboxDebug" id="jSpeed" /><br />
+  </div>
+</div>
+<canvas id="webgl-canvas"></canvas>
 </body>
 </html>

@@ -1,13 +1,10 @@
 @charset "UTF-8";
-/* CSS Document */
-
 *{
   margin:0;
   padding:0;
   font-family:Verdana, Arial, Helvetica, sans-serif;
   font-size:10px;
 }
-
 body{
   background:#b2cbfe;
   width:100%;
@@ -16,7 +13,6 @@ body{
 	background: -moz-linear-gradient(center bottom, #2d445b 0%,#b2cbfe 100%);
 	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #2d445b),color-stop(1, #b2cbfe));
 }
-
 a {
   text-decoration:none;
   font-weight:bold;
@@ -24,22 +20,12 @@ a {
   text-shadow: 0 0 3px #26F;
   
 }
-
 #webgl-canvas{
   display:block;
   float:left;
   border: none;
   position:absolute;
   z-index:0;
-}
-#statusBar, #statusBar span{
-  width:100%;
-  font-size:16px;
-  position:absolute;
-  z-index:3;
-  background:#333;
-  padding:5px 10px;
-  border-bottom:1px solid #fff;
 }
 #console{
   position:absolute;
@@ -50,23 +36,6 @@ a {
   height:100%;
   z-index:5;
 }
-#info{
-  position:absolute;
-  font-size:16px;
-  top:40%;
-  left:50%;
-  margin:auto;
-  margin-left:-175px;
-  width:350px;
-  padding:10px;
-  border:1px solid #fff;
-  z-index:5;
-  background:#333;
-}
-#info a, #info strong{
-  font-size:14px;
-}
-
 .console-field{
   background:#333;
   float:left;
@@ -78,7 +47,6 @@ a {
   padding:0 10px 10px 20px;
   margin:0 0 2px -10px;
 }
-
 .console-field input{
   margin:1px 0 0 0;
   background:#000;

@@ -6,7 +6,6 @@
       ##UNIFORMS##
       ##VARYINGS##
       ##CHUNKS##
-
       void main(void) {
 
         float a = aVertexColor.x + aVertexNormal.x + aSkinWeight.x + aTextureCoord.x;
@@ -61,18 +60,26 @@
       precision mediump float;
       ##UNIFORMS##
       ##VARYINGS##
-
       void main(void) {
         vec3 caustics = texture2D(uSampler1, vec2((vWorld.x)/48.+uTime/12., (vWorld.z-vWorld.y)/95.)).rgb;
-        vec4 colorMap = texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t));
+        vec4 colorMap = texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t), -1.0);
         vec3 ambient = uAmbientCol.rgb * uAmbientCol.a;
 
-        vec4 composit = vec4(((vDiffuse + caustics + ambient)*colorMap.rgb) + vFresnel, colorMap.a);  
+        vec4 composit = vec4(((vDiffuse + caustics*uLightCol.a + ambient)*colorMap.rgb) + vFresnel, colorMap.a);  
     
-        // composit = vec4(composit.rgb, composit.a*0.8);//add bioluminescence
-    
+        float cycleMap = texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t)).b;
+        vec3 biolumMap = texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t), -1.0).rgb;
+        float bioPrim = sin((-cycleMap - jTime/5.0))*biolumMap.r*10.0;  
+        float bioSec = sin((-cycleMap - 0.7 - jTime/5.0))*biolumMap.g*10.0;
+        float bioFresnel = vFresnel.r+vFresnel.g+vFresnel.b * cos((1.6 + jTime/5.0))*2.0;
+        float bioDim = sin((cycleMap + jTime)*0.3)*0.5;  
+        vec3 biolum = colorMap.rgb * bioDim * max(bioPrim+bioSec+bioFresnel,0.0);
+  
+        vec3 l = vec3(vDiffuse + ambient);  
+
         //mix with fog
         composit.rgb = mix(composit.rgb, vFogCol.rgb, vFogCol.a);
+        composit.rgb = mix(composit.rgb, composit.rgb+biolum, pow(1.0-(l.r+l.g+l.b)/3.0,3.0));
   
         if (uShaderDebug == 1.0) {composit = vec4(vDiffuse,1.0);}//diffuse
         else if (uShaderDebug == 2.0) {composit = vec4(vSpecular,1.0);}//specular
@@ -81,6 +88,7 @@
         else if (uShaderDebug == 5.0) {composit = vec4(caustics.rgb,1.0);}//caustics
         else if (uShaderDebug == 6.0) {composit = vec4(colorMap.rgb,1.0);}//color
         else if (uShaderDebug == 7.0) {composit = vec4(vec3(colorMap.a),1.0);}//transparency
+        else if (uShaderDebug == 8.0) {composit = vec4(biolum,1.0);}//bioluminescence
 
         gl_FragColor = composit;
 

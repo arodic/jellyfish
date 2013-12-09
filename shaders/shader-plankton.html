@@ -6,7 +6,6 @@
       ##UNIFORMS##
       ##VARYINGS##
       ##CHUNKS##
-
       void main(void) { 
 
         // TODO BUG fix it
@@ -22,7 +21,6 @@
         
         vec3 pos = vec3(uWorld * rotation * vec4(aVertexPosition, 1.0)) * uScale + uPosition;
         
-        //matrices
         vWorld = uWorld * vec4(pos, 1.0);
         vec4 worldViewProj = uWorldViewProj * vec4(pos, 1.0);
         

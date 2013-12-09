@@ -151,5 +151,16 @@ window.addEventListener('keydown', function(event){
       uFresnelCol = new Float32Array([0.4,0.1,0.2,0.6]);
       uFresnelPower = 2;
       break;
+
+    case 57:
+      uFogTopCol = new Float32Array([0.1,0.1,0.1,0.8]);
+      uFogBottomCol = new Float32Array([0,0,0,0]);
+      uLightPos = new Float32Array([1,1,0]);
+      uLightCol = new Float32Array([0,0,0,0]);
+      uLightSpecCol = new Float32Array([0,0,0,1]);
+      uAmbientCol = new Float32Array([0,0,0,1]);
+      uFresnelCol = new Float32Array([0.4,0.1,0.2,0.6]);
+      uFresnelPower = 2;
+      break;
   }
 })

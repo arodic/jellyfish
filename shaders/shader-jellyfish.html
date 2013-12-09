@@ -1,0 +1,93 @@
+<polymer-element name="shader-jellyfish" extends="shader-template">
+  <template>
+    <script id="vertex" type="x-shader/x-vertex">
+      precision mediump float;
+      ##ATTRIBUTES##
+      ##UNIFORMS##
+      ##VARYINGS##
+      ##CHUNKS##
+
+      void main(void) {
+
+        float a = aVertexColor.x + aVertexNormal.x + aSkinWeight.x + aTextureCoord.x;
+
+        float dpi = 6.2831853;
+        float pi = 3.14159265;
+        float hpi = 1.570796325;
+        float time = mod(jTime+aVertexPosition.y, dpi);
+
+        float offset = smoothstep(0.0,1.,max(0.,-aVertexPosition.y-0.8)/10.);
+
+        vec3 anim = (vec3(aVertexColor.x,aVertexColor.y,aVertexColor.z)/8.0*sin(time) * (1.-offset));
+        vec3 pos = aVertexPosition + anim;
+
+        pos = vec3(uJoint0 * vec4(pos, 1.0))*aSkinWeight.x +
+        vec3(uJoint1 * vec4(pos, 1.0))*aSkinWeight.y +
+        vec3(uJoint2 * vec4(pos, 1.0))*aSkinWeight.z +
+        vec3(uJoint3 * vec4(pos, 1.0))*aSkinWeight.w;
+        vec3 normal = normalize(vec3(uJoint0InvTranspose * vec4(aVertexNormal, 1.0)));
+
+        vWorld = uWorld * vec4(pos, 1.0);
+        vec4 WorldViewProj = uWorldViewProj * vec4(pos, 1.0);
+
+        vec3 eye = normalize(vWorld.xyz - uViewInv[3].xyz);
+        float depth = (WorldViewProj.z+uNear)/uFar;
+        
+        //diffuse
+        vec3 lightDir = normalize(uLightPos - vWorld.xyz);
+        float diffuseProduct = max(dot(normal, lightDir), 0.0);
+        float lightFalloff = pow(max(1.0-(distance(uLightPos, vWorld.xyz)/uLightRadius), 0.0),2.0);
+        vDiffuse = uLightCol.rgb * vec3(diffuseProduct * lightFalloff * uLightCol.a);
+
+        //specular
+        vec3 lightReflectDir = reflect(lightDir, normal);
+        float specularProduct = pow(max(dot(lightReflectDir, eye), 0.0), uLightSpecPower);
+        vSpecular = uLightSpecCol.rgb * vec3(specularProduct * uLightSpecCol.a);
+
+        //fresnel
+        float fresnelProduct = pow(1.0-max(abs(dot(normal, -eye)), 0.0), uFresnelPower);
+        vFresnel = uFresnelCol.rgb * vec3(uFresnelCol.a * fresnelProduct);
+
+        ///fog
+        vFogCol = calcFog(eye, depth, uFogTopCol, uFogBottomCol, uFogDist);
+
+        //
+
+        vTextureCoord = aTextureCoord;
+        gl_Position = WorldViewProj;
+      }
+    </script>
+    <script id="fragment" type="x-shader/x-fragment">
+      precision mediump float;
+      ##UNIFORMS##
+      ##VARYINGS##
+
+      void main(void) {
+        vec3 caustics = texture2D(uSampler1, vec2((vWorld.x)/48.+uTime/12., (vWorld.z-vWorld.y)/95.)).rgb;
+        vec4 colorMap = texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t));
+        vec3 ambient = uAmbientCol.rgb * uAmbientCol.a;
+
+        vec4 composit = vec4(((vDiffuse + caustics + ambient)*colorMap.rgb) + vFresnel, colorMap.a);  
+    
+        // composit = vec4(composit.rgb, composit.a*0.8);//add bioluminescence
+    
+        //mix with fog
+        composit.rgb = mix(composit.rgb, vFogCol.rgb, vFogCol.a);
+  
+        if (uShaderDebug == 1.0) {composit = vec4(vDiffuse,1.0);}//diffuse
+        else if (uShaderDebug == 2.0) {composit = vec4(vSpecular,1.0);}//specular
+        else if (uShaderDebug == 3.0) {composit = vec4(vFresnel,1.0);}//fresnel
+        else if (uShaderDebug == 4.0) {composit = vec4(ambient,1.0);}//ambient
+        else if (uShaderDebug == 5.0) {composit = vec4(caustics.rgb,1.0);}//caustics
+        else if (uShaderDebug == 6.0) {composit = vec4(colorMap.rgb,1.0);}//color
+        else if (uShaderDebug == 7.0) {composit = vec4(vec3(colorMap.a),1.0);}//transparency
+
+        gl_FragColor = composit;
+
+      }
+    </script>
+  </template>
+  <script>
+    Polymer('shader-jellyfish');
+  </script>
+</polymer-element>

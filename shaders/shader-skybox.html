@@ -1,0 +1,34 @@
+<polymer-element name="shader-skybox" extends="shader-template">
+  <template>
+    <script id="vertex" type="x-shader/x-vertex">
+      precision mediump float;   
+      ##ATTRIBUTES##
+      ##UNIFORMS##
+      ##VARYINGS##
+      ##CHUNKS##
+
+      void main(void) { 
+
+        // TODO BUG fix it
+        float a = aVertexPosition.x + aVertexNormal.x + aVertexColor.x + aSkinWeight.x + aTextureCoord.x;
+
+        vec3 worldPos = (uWorld * vec4(aVertexPosition, 1.0)).xyz;
+        vec3 eye = normalize(worldPos.xyz - uViewInv[3].xyz);
+
+        vFogCol = calcFog(eye, 1.0, uFogTopCol, uFogBottomCol, uFogDist);
+        
+        gl_Position = uWorldViewProj * vec4(aVertexPosition, 1.0);        
+      }
+    </script>
+    <script id="fragment" type="x-shader/x-fragment">
+      precision mediump float;
+      ##VARYINGS##
+      void main(void) {
+        gl_FragColor = vec4(vFogCol.rgb, 1.0);
+      }
+    </script>
+  </template>
+  <script>
+    Polymer('shader-skybox');
+  </script>
+</polymer-element>

@@ -1,0 +1,86 @@
+<link rel="import" href="dat-icon.html">
+<polymer-element name="panel-sidebar" attributes="side expanded">
+  <template>
+    <style>
+      @host {
+        * {
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          color: white;
+          background: -webkit-linear-gradient(-60deg, #2d2d2d, #545454);
+          background: -moz-linear-gradient(-60deg, #2d2d2d, #545454);
+          background: linear-gradient(-60deg, #2d2d2d, #545454);
+          display: block;
+          position: absolute;
+          width: 300px;
+          right: 0;
+          top: 0;
+          bottom: 0px;
+        }
+
+        * > #content {
+          overflow-y: auto;
+          overflow-x: hidden;
+          position: absolute;
+          top: 0;
+          bottom: 32px;
+          width: 100%;
+        }
+
+        * > #content:not(.true) > :not(.collapsed) {
+          display: none;
+        }
+        * > #content.true > .collapsed {
+          display: none;
+        }
+
+        * > #footer {
+          background: rgba(25, 25, 25, 0.3);
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          left: 0;
+        }
+      }
+
+    </style>
+    <div id="content" class="{{expanded}}">
+      <content></content>
+    </div>
+    <div id="footer" style="text-align:{{otherside}}">
+      <dat-icon src="{{srcOpen}}" on-click="{{toggle}}" id="btnClose">Close</dat-icon>
+      <dat-icon src="{{srcClose}}" on-click="{{toggle}}" id="btnOpen" style="display:none"></dat-icon>
+    </div>
+  </template>
+  <script>
+    Polymer('panel-sidebar', {
+      expanded: true,
+      side: "left",
+      otherside: "right",
+      ready: function() {
+        if (this.side == "left") {
+          this.top = 50;
+          this.style.left = '0';
+          this.style.right = "auto";
+          this.otherside = "right";
+        }
+        this.srcOpen = this.resolvePath('./images/icon-'+this.side+'.svg');
+        this.srcClose = this.resolvePath('./images/icon-'+this.otherside+'.svg');
+      },
+      toggle: function() {
+        this.expanded = !this.expanded;
+      },
+      expandedChanged: function() {
+        if (this.expanded) {
+          this.$.btnClose.style.display = 'inline-block';
+          this.$.btnOpen.style.display = 'none';
+          this.style.width = '300px';
+        } else {
+          this.$.btnClose.style.display = 'none';
+          this.$.btnOpen.style.display = 'inline-block';
+          this.style.width = '32px';
+        }
+        this.fire('panel-sidebar-changed');
+      }
+    });
+  </script>
+</polymer-element>

@@ -11,6 +11,10 @@ function initBuffers(){
   loadObject('jellyfish1','meshes/jellyfish1.json');
   loadObject('jellyfish2','meshes/jellyfish2.json');
   loadObject('jellyfish3','meshes/jellyfish3.json');
+  loadObject('sphere','meshes/sphere.json');
+  loadObject('axis','meshes/axis.json');
+  loadObject('quad','meshes/quad.json');
+  loadObject('box','meshes/box.json');
 }
 
 function loadObject(name, file){
@@ -53,6 +57,8 @@ function initBuffer(name, data) {
   vertexTextureCoordBuffer[name].itemSize = 3;
   vertexTextureCoordBuffer[name].numItems = data.vertexTextureCoords.length/3;
 
+  // TODO: make sure only jellyfish have weight data
+
   weightData = [];
   for(var i=0; i<data.vertexPositions.length; i=i+3){
     var ypos = -data.vertexPositions[i+1]/3;
@@ -81,22 +87,22 @@ function initBuffer(name, data) {
 function drawBuffer(name){
   if(vertexPositionBuffer[name]){
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer[name]);
-    gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, vertexPositionBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(currentShader.program["aVertexPosition"], vertexPositionBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexNormalBuffer[name]);
-    gl.vertexAttribPointer(currentProgram.vertexNormalAttribute, vertexNormalBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(currentShader.program["aVertexNormal"], vertexNormalBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer[name]);
-    gl.vertexAttribPointer(currentProgram.vertexColorAttribute, vertexColorBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(currentShader.program["aVertexColor"], vertexColorBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexTextureCoordBuffer[name]);
-    gl.vertexAttribPointer(currentProgram.textureCoordAttribute, vertexTextureCoordBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(currentShader.program["aTextureCoord"], vertexTextureCoordBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
     
     gl.bindBuffer(gl.ARRAY_BUFFER, skinWeightBuffer[name]);
-    gl.vertexAttribPointer(currentProgram.skinWeightAttribute, skinWeightBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(currentShader.program["aSkinWeight"], skinWeightBuffer[name].itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer[name]);
-
     gl.drawElements(gl.TRIANGLES, vertexIndexBuffer[name].numItems, gl.UNSIGNED_SHORT, 0);
+
   }
 }

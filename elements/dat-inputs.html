@@ -1,0 +1,222 @@
+<polymer-element name="dat-input-boolean" attributes="value">
+  <template>
+    <style type="text/css">
+      @host {
+        * {
+            display: inline;
+        }
+        * > .dat-input-boolean {
+            background-image: url('./images/check-deselected.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+        * > .dat-input-boolean.true {
+            background-image: url('./images/check-selected.svg');
+        }
+      }
+    </style>
+    <span class="dat-input-boolean {{value}}" on-click="{{toggle}}">&nbsp;</span>
+  </template>
+  <script>
+    Polymer('dat-input-boolean', {
+      value: false,
+      toggle: function() {
+        this.value = !this.value;
+        this.fire('dat-valuechanged');
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="dat-input-string" attributes="value">
+  <template>
+    <link rel="stylesheet" type="text/css" href="./dat-inputs.css">
+    <input type="text" value="{{value}}" on-keydown="{{handleKeyCodes}}"></input>
+  </template>
+  <script>
+    Polymer('dat-input-string', {
+      value: "",
+      handleKeyCodes: function(inEvent) {
+        inEvent.stopPropagation();
+        this.fire('dat-valuechanged');
+      },
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="dat-input-number" attributes="value step min max">
+  <template>
+    <link rel="stylesheet" type="text/css" href="./dat-inputs.css">
+    <style>
+      @host {
+        * {
+          position: relative;
+        }
+        * > #blocker {
+          display: inline-block;
+          height: inherit;
+          width: auto;
+          position: absolute;
+          top:0;
+          left: 0;
+          z-index: 100000;
+          cursor: ew-resize;
+        }
+      }
+    </style>
+    <div id="blocker" on-dblclick="{{focus}}" style="left:{{bx}}px"></div>
+    <input id="number" type="text" value="{{roundedValue}}" on-keydown="{{handleKeyCodes}}">
+    </input>
+  </template>
+  <script>
+      Polymer('dat-input-number', {
+        value: 0,
+        roundedValue: 0,
+        min: -Infinity,
+        max: Infinity,
+        step: 0.01,
+        ready: function() {
+          var scope = this;
+          var delta = 0;
+          var deltaStep = 5;
+          var x = 0
+          var xOld = 0
+          var rect;
+
+          var startDrag = function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            document.body.classList.add("ew-dragging")
+            xOld = event.clientX;
+            delta = 0;
+            document.addEventListener( 'mousemove', drag, false );
+            document.addEventListener( 'mouseup', endDrag, false );
+          };
+          var endDrag = function(){
+            document.body.classList.remove("ew-dragging")
+            document.removeEventListener( 'mousemove', drag, false );
+            document.removeEventListener( 'mouseup', endDrag, false );
+          };
+          var drag = function(event) {
+            x = event.clientX;
+            delta += x-xOld;
+            xOld = event.clientX;
+
+            while (Math.abs(delta)>deltaStep) {
+              if (delta>deltaStep){
+                scope.roundedValue += 1 * scope.step;
+                delta -= deltaStep;
+              }
+              if (delta<-deltaStep){
+                scope.roundedValue -= 1 * scope.step;
+                delta += deltaStep;
+              }
+            }
+            scope.roundedValue = Math.round(scope.roundedValue * 10000) / 10000;
+            scope.roundedValue = Math.max(scope.roundedValue, scope.min);
+            scope.roundedValue = Math.min(scope.roundedValue, scope.max);
+          };
+
+          var resetBlocker = function(){
+            rect = scope.getBoundingClientRect();
+            scope.$.blocker.style.width = rect.width + "px";
+            scope.$.blocker.style.height = rect.height + "px";
+          }
+          this.$.number.addEventListener('mouseover', resetBlocker);
+          this.$.blocker.addEventListener('mousedown', startDrag);
+        },
+        focus: function() {
+          this.$.number.focus();
+          this.$.number.select();
+        },
+        handleKeyCodes: function(inEvent) {
+          inEvent.stopPropagation();
+          var validKeys = [46,48,49,50,51,52,53,54,55,56,57,189,190,37,38,39,40,8,9];
+          var valid = false;
+          for (var i in validKeys){
+            if (inEvent.which == validKeys[i]) valid = true;
+          }
+          if (!valid) inEvent.preventDefault();
+          // TODO: fix
+          var scope = this;
+          setTimeout(function(){
+            var newValue = parseFloat(scope.$.number.value);
+            if (!isNaN(newValue)) {
+              scope.value = newValue;
+            }
+          },1);
+        },
+        roundedValueChanged: function() {
+          this.value = this.roundedValue;
+        },
+        valueChanged: function() {
+          this.roundedValue = Math.round(this.value * 10000) / 10000;
+          this.fire('dat-valuechanged');
+        }
+      });
+  </script>
+</polymer-element>
+
+<polymer-element name="dat-input-vector2" attributes="value">
+  <template>
+    <link rel="stylesheet" type="text/css" href="./dat-inputs.css">
+    <dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="x" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="y" class="quarter-width"></dat-input-number>
+  </template>
+  <script>
+    Polymer('dat-input-vector2', {
+      min: -Infinity,
+      max: Infinity,
+      step: 0.01,
+      value: new Float32Array(2),
+      valueChanged: function(){
+        this.$.x.bindProperty('value', this.value, 0);
+        this.$.y.bindProperty('value', this.value, 1);
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="dat-input-vector3" attributes="value">
+  <template>
+    <link rel="stylesheet" type="text/css" href="./dat-inputs.css">
+    <dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="x" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="y" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="z" class="quarter-width"></dat-input-number>
+  </template>
+  <script>
+    Polymer('dat-input-vector3', {
+      min: -Infinity,
+      max: Infinity,
+      step: 0.01,
+      value: new Float32Array(3),
+      valueChanged: function(){
+        this.$.x.bindProperty('value', this.value, 0);
+        this.$.y.bindProperty('value', this.value, 1);
+        this.$.z.bindProperty('value', this.value, 2);
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="dat-input-vector4" attributes="value">
+  <template>
+    <link rel="stylesheet" type="text/css" href="./dat-inputs.css">
+    <dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="x" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="y" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="z" class="quarter-width"></dat-input-number><dat-input-number min="{{min}}" max="{{max}}" step="{{step}}" id="w" class="quarter-width"></dat-input-number>
+  </template>
+  <script>
+    Polymer('dat-input-vector4', {
+      min: -Infinity,
+      max: Infinity,
+      step: 0.01,
+      value: new Float32Array(4),
+      valueChanged: function(){
+        this.$.x.bindProperty('value', this.value, 0);
+        this.$.y.bindProperty('value', this.value, 1);
+        this.$.z.bindProperty('value', this.value, 2);
+        this.$.w.bindProperty('value', this.value, 3);
+      }
+    });
+  </script>
+</polymer-element>

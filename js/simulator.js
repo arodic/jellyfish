@@ -28,12 +28,12 @@ function simulate(){
   serverTime.total = serverTime.hours*3600 + serverTime.minutes*60 + serverTime.seconds;
 
   var i = 0;
-  if(jellyfishTargets.count<Param.jCount){
+  if(jellyfishTargets.count<jCount){
     jellyfishTargets[jellyfishTargets.count] = new JellyfishTarget(
-            Math.random(i)*2*Param.pBbox[0]-Param.pBbox[0],
-            Math.random(i)*2*Param.pBbox[1]-Param.pBbox[1]-40,
-            Math.random(i)*2*Param.pBbox[2]-Param.pBbox[2],
-            Math.random(i)*Param.jScaleRandom+Param.jScale,
+            Math.random(i)*uBbox[0]-uBbox[0],
+            Math.random(i)*uBbox[1]-uBbox[1]-40,
+            Math.random(i)*uBbox[2]-uBbox[2],
+            Math.random(i)*jScaleRandom+jScale,
             jellyfishTargets.count,
             serverMilis
     );
@@ -42,7 +42,7 @@ function simulate(){
     jellyfishTargets.count += 1;
     i++;
   }
-  else if(jellyfishTargets.count>Param.jCount){
+  else if(jellyfishTargets.count>jCount){
     jellyfishTargets.order3D.pop();
     jellyfishTargets.order.pop();
     jellyfishTargets.count -= 1;
@@ -52,15 +52,15 @@ function simulate(){
   for(var i=0; i < jellyfishTargets.count; i++){
 
     //SET TIME
-    jellyfishTargets[i].time += (Param.jSpeed*16/(jellyfishTargets[i].scl+1))*jellyfishTargets[i].speed;
+    jellyfishTargets[i].time += (jSpeed*16/(jellyfishTargets[i].scl+1))*jellyfishTargets[i].speed;
 
     //MOVE
     var time = new Date().getTime();
-    var speed = jellyfishTargets[i].scl*Param.jSpeed*2.8;
+    var speed = jellyfishTargets[i].scl*jSpeed*2.8;
     var flow = V3.$(
-            speed*Math.sin((jellyfishTargets[i].pos[2]+jellyfishTargets[i].id+time/10000)*Param.jTurb),
-            speed*Math.sin((jellyfishTargets[i].pos[0]+jellyfishTargets[i].id+time/10000)*Param.jTurb),
-            speed*Math.sin((jellyfishTargets[i].pos[1]+jellyfishTargets[i].id+time/10000)*Param.jTurb)
+            speed*Math.sin((jellyfishTargets[i].pos[2]+jellyfishTargets[i].id+time/10000)*jTurb),
+            speed*Math.sin((jellyfishTargets[i].pos[0]+jellyfishTargets[i].id+time/10000)*jTurb),
+            speed*Math.sin((jellyfishTargets[i].pos[1]+jellyfishTargets[i].id+time/10000)*jTurb)
     );
 
     V3.add(jellyfishTargets[i].pos, flow, jellyfishTargets[i].pos);

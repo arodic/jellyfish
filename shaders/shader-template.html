@@ -1,0 +1,217 @@
+<polymer-element name="shader-template" style="display:none">
+  <template>
+    <div id="calcFog">
+      vec4 calcFog(vec3 eye, float depth,vec4 topCol, vec4 bottomCol, float fogDist) {
+        float height = smoothstep(bottomCol.a, topCol.a, (eye.y+1.0)/2.0);
+        vec4 fogCol = vec4(uFogTopCol.rgb*height + bottomCol.rgb*(1.0-height), min(max((uFar-uNear)*depth/fogDist,0.0),1.0));
+        return fogCol;
+      }
+    </div>
+    <div id="vertex"></div>
+    <div id="fragment"></div>
+  </template>
+  <script>
+  (function(){
+ 
+    Polymer('shader-template', {
+        vertexScript: '',
+        fragmentScript: '',
+        attributes: {
+            aVertexPosition:  { type: "attribute vec3" },
+            aVertexNormal:    { type: "attribute vec3" },
+            aVertexColor:     { type: "attribute vec3" },
+            aTextureCoord:    { type: "attribute vec3" },
+            aSkinWeight:      { type: "attribute vec4" }
+        },
+        uniforms: {
+            uWorld:             { type: "uniform mat4" },
+            uView:              { type: "uniform mat4" },
+            uViewInv:           { type: "uniform mat4" },
+            uWorldView:         { type: "uniform mat4" },
+            uWorldViewProj:     { type: "uniform mat4" },
+            uWorldInvTranspose: { type: "uniform mat4" },
+            uTime:              { type: "uniform float" },
+
+            uNear:              { type: "uniform float" },
+            uFar:               { type: "uniform float" },
+            uFov:               { type: "uniform float" },
+
+            uLightPos:          { type: "uniform vec3" },
+            uLightRadius:       { type: "uniform float" },
+            uLightCol:          { type: "uniform vec4" },
+            uLightSpecCol:      { type: "uniform vec4" },
+            uLightSpecPower:    { type: "uniform float" },
+            uAmbientCol:        { type: "uniform vec4" },
+            uFresnelCol:        { type: "uniform vec4" },
+            uFresnelPower:      { type: "uniform float" },
+            uAlpha:             { type: "uniform float" },
+            
+            uFogDist:           { type: "uniform float" },
+            uFogTopCol:         { type: "uniform vec4" },
+            uFogBottomCol:      { type: "uniform vec4" },
+
+            uSampler0:              { type: "uniform sampler2D" },
+            uSampler1:              { type: "uniform sampler2D" },
+            uSampler2:              { type: "uniform sampler2D" },
+
+            uJoint0:                { type: "uniform mat4" },
+            uJoint1:                { type: "uniform mat4" },
+            uJoint2:                { type: "uniform mat4" },
+            uJoint3:                { type: "uniform mat4" },
+            uJoint0InvTranspose:    { type: "uniform mat4" },
+            jTime:                  { type: "uniform float" },
+
+            uPosition:              { type: "uniform vec3" },
+            uScale:                 { type: "uniform vec3" },
+
+            uBbox:                  { type: "uniform vec3" },
+            uPID:                   { type: "uniform float" },
+
+            uShaderDebug:           { type: "uniform float" }
+        },
+        varyings: {
+            vFogCol:                { type: "varying vec4" },
+            vWorld:                 { type: "varying vec4" },
+            vTextureCoord:          { type: "varying vec3" },
+            vDiffuse:               { type: "varying vec3" },
+            vSpecular:              { type: "varying vec3" },
+            vFresnel:               { type: "varying vec3" },
+            vFade:                  { type: "varying float" }
+        },
+        chunks: {
+            calcFog:                { type: "vec4 calcFog" }
+        },
+        compile: function(gl) {
+
+            // CREATE HLSL CODE
+
+            this.vertexScript = this.$.vertex.textContent;
+            this.fragmentScript = this.$.fragment.textContent;
+
+            var chunksScript = '';
+            for (var i in this.chunks) {
+                if (this.vertexScript.indexOf(i) != -1) {
+                    chunksScript += this.$[i].innerText;
+                } else {
+                    // delete this.attributes[i];
+                }
+            }
+            this.vertexScript = this.vertexScript.replace('##CHUNKS##', chunksScript);
+
+            chunksScript = '';
+            for (var i in this.chunks) {
+                if (this.fragmentScript.indexOf(i) != -1) {
+                    chunksScript += this.$[i].innerText;
+                } else {
+                    // delete this.attributes[i];
+                }
+            }
+            this.fragmentScript = this.fragmentScript.replace('##CHUNKS##', chunksScript);
+
+            var attributesScript = "";
+            for (var i in this.attributes) {
+                if (this.vertexScript.indexOf(i) != -1) {
+                    attributesScript += this.attributes[i].type + " " + i + "; ";
+                } else {
+                    // delete this.attributes[i];
+                }
+            }
+            this.vertexScript = this.vertexScript.replace('##ATTRIBUTES##', attributesScript);
+
+            var uniformsScript = "";
+            for (var i in this.uniforms) {
+                if (this.vertexScript.indexOf(i) != -1) {
+                    uniformsScript += this.uniforms[i].type + " " + i + "; ";
+                }
+            }
+            this.vertexScript = this.vertexScript.replace('##UNIFORMS##', uniformsScript);
+
+            uniformsScript = "";
+            for (var i in this.uniforms) {
+                if (this.fragmentScript.indexOf(i) != -1) {
+                    uniformsScript += this.uniforms[i].type + " " + i + "; ";
+                } else if (this.vertexScript.indexOf(i) == -1) {
+                    // delete this.uniforms[i];
+                }
+            }
+            this.fragmentScript = this.fragmentScript.replace('##UNIFORMS##', uniformsScript);
+
+            var varyingsScript = "";
+            for (var i in this.varyings) {
+                if (this.vertexScript.indexOf(i) != -1 || this.fragmentScript.indexOf(i) != -1) {
+                    varyingsScript += this.varyings[i].type + " " + i + "; ";
+                } else {
+                    // delete this.varyings[i];
+                }
+            }
+            this.vertexScript = this.vertexScript.replace('##VARYINGS##', varyingsScript);
+            this.fragmentScript = this.fragmentScript.replace('##VARYINGS##', varyingsScript);
+            // CREATE PROGRAM
+
+            this.vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(this.vertexShader, this.vertexScript);
+            gl.compileShader(this.vertexShader);
+
+            if (!gl.getShaderParameter(this.vertexShader, gl.COMPILE_STATUS)) {
+              console.error(gl.getShaderInfoLog(this.vertexShader));
+              return null;
+            }
+
+            this.fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(this.fragmentShader, this.fragmentScript);
+            gl.compileShader(this.fragmentShader);
+
+            if (!gl.getShaderParameter(this.fragmentShader, gl.COMPILE_STATUS)) {
+              console.error(gl.getShaderInfoLog(this.fragmentShader));
+              return null;
+            }
+
+            this.program = gl.createProgram();
+            gl.attachShader(this.program, this.vertexShader);
+            gl.attachShader(this.program, this.fragmentShader);
+            gl.linkProgram(this.program);
+            if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+              console.error("Could not initialise shaders");
+              return null;
+            }
+
+            // SETUP ATTRIBUTES AND UNIFORMS
+
+            for (var i in this.attributes){
+                this.program[i] = gl.getAttribLocation(this.program, i);
+                gl.enableVertexAttribArray(this.program[i]);
+            }
+
+            for (var i in this.uniforms){
+                this.program[i] = gl.getUniformLocation(this.program, i);
+            }
+
+            return this.program;
+
+        },
+        setUniforms: function() {
+
+            // TODO bind to this.uniform.value instead of copying every time
+            for (var i in this.uniforms) {
+                if (window[i] !== undefined) {
+                    if (window[i] instanceof Float32Array && window[i].length == 16) {
+                        gl.uniformMatrix4fv(this.program[i], gl.FALSE, new Float32Array(window[i]));
+                    } else if (window[i] instanceof Float32Array && window[i].length == 4){
+                        gl.uniform4fv(this.program[i], new Float32Array(window[i]));
+                    } else if (window[i] instanceof Float32Array && window[i].length == 3){
+                        gl.uniform3fv(this.program[i], new Float32Array(window[i]));
+                    } else if (typeof window[i] == "number"){
+                        gl.uniform1f(this.program[i], window[i]);
+                    }
+                }
+            }
+            gl.uniform1i(this.program["uSampler0"], 0);
+            gl.uniform1i(this.program["uSampler1"], 1);
+            gl.uniform1i(this.program["uSampler2"], 2);
+
+        }
+    });
+  
+  })();
+  </script>
+</polymer-element>

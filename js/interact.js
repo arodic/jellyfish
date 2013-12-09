@@ -14,11 +14,11 @@ var mouseXY = V3.$(0,0,0);
 function interact(){
   canvas.onmousedown = function ( e ){
     drag  = 1;
-    rxOffs = e.clientX/100 - localParam.camera.rotate[1];
-    ryOffs = e.clientY/100 - localParam.camera.rotate[0];
-    txOffs = +e.clientX/10 - localParam.camera.translate[0];
-    tyOffs = +e.clientY/10 - localParam.camera.translate[1];
-    tzOffs = +e.clientY/10 +e.clientX/10 - localParam.camera.translate[2];
+    rxOffs = e.clientX/100 - camera.rotate[1];
+    ryOffs = e.clientY/100 - camera.rotate[0];
+    txOffs = +e.clientX/10 - camera.translate[0];
+    tyOffs = +e.clientY/10 - camera.translate[1];
+    tzOffs = +e.clientY/10 +e.clientX/10 - camera.translate[2];
   }
   canvas.onmouseup = function ( e ){
     drag  = 0;
@@ -32,13 +32,13 @@ function interact(){
 
    if ( drag == 0 ) return;
    if ( e.altKey ) {
-      localParam.camera.translate[2] = +e.clientY/10 +e.clientX/10 - tzOffs;}
+      camera.translate[2] = +e.clientY/10 +e.clientX/10 - tzOffs;}
    else if ( e.shiftKey ) {
-      localParam.camera.translate[0] = e.clientX/10 - txOffs;
-      localParam.camera.translate[1] = e.clientY/10 - tyOffs;         
+      camera.translate[0] = e.clientX/10 - txOffs;
+      camera.translate[1] = e.clientY/10 - tyOffs;         
    } else {
-      localParam.camera.rotate[1] = (e.clientX/100 - rxOffs);
-      localParam.camera.rotate[0] = (e.clientY/100 - ryOffs);
+      camera.rotate[1] = (e.clientX/100 - rxOffs);
+      camera.rotate[0] = (e.clientY/100 - ryOffs);
    }
   }
 }

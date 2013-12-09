@@ -1,0 +1,60 @@
+<polymer-element name="shader-ray" extends="shader-template">
+  <template>
+    <script id="vertex" type="x-shader/x-vertex">
+      precision mediump float;   
+      ##ATTRIBUTES##
+      ##UNIFORMS##
+      ##VARYINGS##
+      ##CHUNKS##
+
+      void main(void) { 
+
+        // TODO BUG fix it
+        float a = aVertexPosition.x + aVertexNormal.x + aVertexColor.x + aSkinWeight.x + aTextureCoord.x;
+
+        //Vertex Animation
+        vec3 pos = vec3(uWorld * vec4(aVertexPosition, 1.0)) * uScale + uPosition;
+        
+        // //matrices
+        vWorld = uWorld * vec4(pos, 1.0);
+        // vWorldView = uWorldView * vec4(pos, 1.0);
+        vec4 WorldViewProj = uWorldViewProj * vec4(pos, 1.0);
+        // vWorldInvTranspose = uWorldInvTranspose * vec4(pos, 1.0);
+        // vViewInv = uViewInv * vec4(pos, 1.0);
+
+        vec3 eye = normalize(vWorld.xyz - uViewInv[3].xyz);
+        float depth = (WorldViewProj.z+uNear)/uFar;
+
+        vFogCol = calcFog(eye, depth, uFogTopCol, uFogBottomCol, uFogDist);
+        
+        vec4 worldViewProj = uWorldViewProj * vec4(pos, 1.0);
+
+        vFade = min(1.0,uBbox[0]-abs(uPosition[0]));
+        vFade *= min(1.0,uBbox[1]-abs(uPosition[1]));
+        vFade *= min(1.0,uBbox[2]-abs(uPosition[2]));
+
+        vWorld = uWorld * vec4(uPosition, 1.0);
+        vTextureCoord = aTextureCoord;
+        gl_Position = worldViewProj;    
+      }
+    </script>
+    <script id="fragment" type="x-shader/x-fragment">
+      precision mediump float;
+      ##UNIFORMS##
+      ##VARYINGS##
+      void main(void) {
+        
+        float colorMap = texture2D(uSampler0, vec2(vTextureCoord.s, vTextureCoord.t)).r;
+        // vec3 caustics = texture2D(uSampler1, vec2((vWorld.x)/480.+uTime/120., (vWorld.z-vWorld.y)/950.)).rgb;
+        
+        vec4 composit = vec4(vec3(vFogCol.rgb)*0.25, colorMap*(1.0-vFogCol.a)*uAlpha);
+
+        gl_FragColor = composit;
+
+      }
+    </script>
+  </template>
+  <script>
+    Polymer('shader-ray');
+  </script>
+</polymer-element>

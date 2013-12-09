@@ -1,23 +1,24 @@
 // JavaScript Document
 var texture = {};
-var textureOK = {};
 
 function initTextures() {
   loadTexture('jellyfish', 'images/jellyfish.png');
   loadTexture('luminescence', 'images/luminescence.png');
-
+  loadTexture('plankton', 'images/plankton.jpg');
+  loadTexture('blob', 'images/blob.jpg');
+  loadTexture('halfBlob', 'images/halfBlob.jpg');
+  
   for (var i=1; i <= 32; i++) {
     loadTexture('caustics'+i, 'images/caustics/caustics7.'+pad2(i-1)+'.jpg');
   }
 }
 
 function loadTexture(label, path) {
-  textureOK[label] = 0;
   var imageFile = new Image();
   imageFile.src = path;
-  texture[label] = gl.createTexture();
-  texture[label].image = imageFile;
   imageFile.onload = function() {
+    texture[label] = gl.createTexture();
+    texture[label].image = imageFile;
     handleLoadedTexture(texture[label], label);
   }
 }
@@ -30,16 +31,12 @@ function handleLoadedTexture(textures, label) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
   gl.generateMipmap(gl.TEXTURE_2D);
   gl.bindTexture(gl.TEXTURE_2D, null);
-  textureOK[label] = 1;
 }
 
 function bindTexture(name, i) {
-  if(textureOK[name] == 1){
-    if (i==0) gl.activeTexture(gl.TEXTURE0);
-    if (i==1) gl.activeTexture(gl.TEXTURE1);
-    if (i==2) gl.activeTexture(gl.TEXTURE2);
+  if(texture[name]){
+    gl.activeTexture(gl["TEXTURE"+i]);
     gl.bindTexture(gl.TEXTURE_2D, texture[name]);
-    gl.uniform1i(currentProgram.sampler[i], i);
   }
 }
 

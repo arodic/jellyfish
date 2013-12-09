@@ -67,13 +67,16 @@
 
         vec4 composit = vec4(((vDiffuse + caustics*uLightCol.a + ambient)*colorMap.rgb) + vFresnel, colorMap.a);  
     
-        float cycleMap = texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t)).b;
-        vec3 biolumMap = texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t), -1.0).rgb;
-        float bioPrim = sin((-cycleMap - jTime/5.0))*biolumMap.r*10.0;  
-        float bioSec = sin((-cycleMap - 0.7 - jTime/5.0))*biolumMap.g*10.0;
+        vec4 biolumMap = texture2D(uSampler2, vec2(vTextureCoord.s, vTextureCoord.t), -1.0);
+
+        float cycleMap = biolumMap.a;
+        float bio0 = sin((-cycleMap - 0.1 - jTime/5.0))*biolumMap.r*10.0;  
+        float bio1 = sin((-cycleMap - 0.7 - jTime/5.0))*biolumMap.g*10.0;
+        float bio2 = sin((-cycleMap - 2.5 - jTime/5.0))*biolumMap.b*10.0;
+        
         float bioFresnel = vFresnel.r+vFresnel.g+vFresnel.b * cos((1.6 + jTime/5.0))*2.0;
         float bioDim = sin((cycleMap + jTime)*0.3)*0.5;  
-        vec3 biolum = colorMap.rgb * bioDim * max(bioPrim+bioSec+bioFresnel,0.0);
+        vec3 biolum = colorMap.rgb * bioDim * max(bio0+bio1+bio2+bioFresnel,0.0);
   
         vec3 l = vec3(vDiffuse + ambient);  
 

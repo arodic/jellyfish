@@ -20,12 +20,6 @@ var force;
 var s1,s2;
 
 function simulate(){
-  var serverTime = new Date();
-  var serverMilis = serverTime.getTime()%100000000/1000;
-  serverTime.hours = (serverTime.getHours()+6)%24;
-  serverTime.minutes = serverTime.getMinutes();
-  serverTime.seconds = serverTime.getSeconds();
-  serverTime.total = serverTime.hours*3600 + serverTime.minutes*60 + serverTime.seconds;
 
   var i = 0;
   if(jellyfishTargets.count<jCount){
@@ -35,7 +29,7 @@ function simulate(){
             Math.random(i)*uBbox[2]-uBbox[2],
             Math.random(i)*jScaleRandom+jScale,
             jellyfishTargets.count,
-            serverMilis
+            uTime%100000000/1000
     );
     jellyfishTargets.order.push([jellyfishTargets.count,0]);
     jellyfishTargets.order3D.push([jellyfishTargets.count,0]);

@@ -727,7 +727,7 @@ M4x4.makeFrustum = function M4x4_makeFrustum(left, right, bottom, top, znear, zf
  *   If r is specified, returns r after creating the projection matrix.
  *   Otherwise, returns a new 4x4 matrix.
  */
-M4x4.makePerspective = function M4x4_makePerspective (fovy, aspect, znear, zfar, r) {
+M4x4.makePerspective = function M4x4_makePerspective (fovy, aspect, znear, zfar, r, m) {
     //MathUtils_assert(r == undefined || r.length == 16, "r == undefined || r.length == 16");
 
     var ymax = znear * Math.tan(fovy * Math.PI / 360.0);
@@ -735,7 +735,7 @@ M4x4.makePerspective = function M4x4_makePerspective (fovy, aspect, znear, zfar,
     var xmin = ymin * aspect;
     var xmax = ymax * aspect;
 
-    return M4x4.makeFrustum(xmin, xmax, ymin, ymax, znear, zfar, r);
+    M4x4.makeFrustum(xmin, xmax, ymin, ymax, znear, zfar, r, m);
 };
 
 M4x4.makeOffsetPerspective = function M4x4_makeOffsetPerspective (fovy, aspect, znear, zfar, offsetX, offsetY, rangeX, rangeY, r) {

@@ -11,7 +11,7 @@ function drawSkybox(){
   M4x4.scale1(100,uViewInv,uWorld);
   
   M4x4.mul(uView,uWorld,uWorldView);
-  M4x4.mul(mProjection,uWorldView,uWorldViewProj);
+  M4x4.mul(uProjection,uWorldView,uWorldViewProj);
   M4x4.inverseOrthonormal(uView,uViewInv);
 
   setShader("skybox");

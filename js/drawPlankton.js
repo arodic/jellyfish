@@ -23,7 +23,7 @@ function drawPlankton(){
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
   bindTexture('plankton', 0);
   
-  uWorld = M4x4.makeTranslate3(0,0,0);
+  M4x4.makeTranslate3(0,0,0,uWorld);
   M4x4.rotate(-camera.rotate[1],V3.$(0,1,0),uWorld,uWorld);
   M4x4.rotate(-camera.rotate[0],V3.$(1,0,0),uWorld,uWorld);
 

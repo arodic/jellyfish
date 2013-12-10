@@ -1,7 +1,7 @@
 <polymer-element name="shader-plankton" extends="shader-template">
   <template>
     <script id="vertex" type="x-shader/x-vertex">
-      precision mediump float;   
+      precision highp float;   
       ##ATTRIBUTES##
       ##UNIFORMS##
       ##VARYINGS##
@@ -36,7 +36,7 @@
       }
     </script>
     <script id="fragment" type="x-shader/x-fragment">
-      precision mediump float;
+      precision highp float;
       ##UNIFORMS##
       ##VARYINGS##
       void main(void) {

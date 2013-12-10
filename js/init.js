@@ -13,7 +13,7 @@ function animate(){
 
   requestAnimationFrame( animate );
 
-  uTime = new Date().getTime() % 100000000 / 1000;
+  uTime = Date.now() % 100000000 / 1000;
 
   drawScene();
 

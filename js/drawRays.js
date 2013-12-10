@@ -15,6 +15,7 @@ function drawRays(){
 
   mTemp = M4x4.clone(uWorld);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+  gl.blendEquation(gl.FUNC_REVERSE_SUBTRACT);
   gl.depthMask(false);
   gl.disable(gl.DEPTH_TEST);
   bindTexture('blob', 0);
@@ -35,6 +36,7 @@ function drawRays(){
 
   gl.depthMask(true);
   gl.enable(gl.DEPTH_TEST);
+  gl.blendEquation(gl.FUNC_ADD);  
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   uWorld = M4x4.clone(mTemp);	
 }

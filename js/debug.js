@@ -43,6 +43,13 @@ var jScale = 3;
 var jScaleRandom = 3;
 var jTurb = 0.1;
 var jSpeed = 0.01;
+var jRepel = 1;
+
+var jGravity = -0.005;
+var jSpring = 2;
+var jMass = 0.1;
+var jStiffness = 0.2;
+var jDamping = 0.1;
 
 var pCount = 50;
 var pScale = 1;

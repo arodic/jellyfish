@@ -179,6 +179,7 @@ V3.add = function V3_add(a, b, r) {
     return r;
 };
 
+
 /*
  * Function: V3.sub
  *
@@ -234,6 +235,22 @@ V3.neg = function V3_neg(a, r) {
     r[0] = - a[0];
     r[1] = - a[1];
     r[2] = - a[2];
+    return r;
+};
+
+var d;
+
+V3.falloff = function V3_falloff(a, r) {
+    //MathUtils_assert(a.length == 3, "a.length == 3");
+    //MathUtils_assert(r == undefined || r.length == 3, "r == undefined || r.length == 3");
+
+    d = V3.length(a)
+    if (r == undefined)
+        r = new MJS_FLOAT_ARRAY_TYPE(3);
+    V3.scale(a, 1/(1+Math.pow(d,2)),r);
+    // if (a[0] != 0) r[0] = a[0]/a[0]/a[0];
+    // if (a[1] != 0) r[1] = a[1]/a[1]/a[1];
+    // if (a[2] != 0) r[2] = a[2]/a[2]/a[2];
     return r;
 };
 

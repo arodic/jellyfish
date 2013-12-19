@@ -12,7 +12,6 @@ function initShaders() {
   shaders["jellyfish"] = compileShader("shader-jellyfish", gl);
   shaders["plankton"] = compileShader("shader-plankton", gl);
   shaders["ray"] = compileShader("shader-ray", gl);
-
   setShader("skybox");
 }
 

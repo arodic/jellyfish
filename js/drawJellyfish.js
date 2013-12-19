@@ -128,9 +128,9 @@ function JellyfishInstance(pos,scl,time){
   }
 
   this.simulate = function(){
-    this.s[0].spring = 1.295 * this.scl * (2-this.propel);
+    this.s[0].spring = 1.295 * this.scl * (1-this.propel);
     this.s[0].update(this.pos);
-    this.s[0].gravity = -0.01;
+    // this.s[0].gravity = -0.01;
 
     M4x4.makeTranslate(this.s[0].pos,uJoint0);
     M4x4.mul(uJoint0,this.s[0].lookat,uJoint0);
@@ -139,20 +139,23 @@ function JellyfishInstance(pos,scl,time){
     for (j=1;j<=3;j++){
       this.s[j].spring = 2.95 * this.scl;
       this.s[j].update(this.s[j-1].pos);
-      this.s[j].gravity = -0.02;
+      // this.s[j].gravity = -0.02;
       if (j==1){
+        // this.s[j].repel();
         M4x4.makeTranslate(this.s[j].pos,uJoint1);
         M4x4.mul(uJoint1,this.s[j].lookat, uJoint1);
         M4x4.scale1(this.scl,uJoint1,uJoint1);
         M4x4.translate3(0,3*j,0,uJoint1,uJoint1);
       }
       if (j==2){
+        // this.s[j].repel();
         M4x4.makeTranslate(this.s[j].pos,uJoint2);
         M4x4.mul(uJoint2,this.s[j].lookat, uJoint2);
         M4x4.scale1(this.scl,uJoint2,uJoint2);
         M4x4.translate3(0,3*j,0,uJoint2,uJoint2);
       }
       if (j==3){
+        // this.s[j].repel();
         M4x4.makeTranslate(this.s[j].pos,uJoint3);
         M4x4.mul(uJoint3,this.s[j].lookat, uJoint3);
         M4x4.scale1(this.scl,uJoint3,uJoint3);
@@ -166,11 +169,7 @@ function JellyfishInstance(pos,scl,time){
 function Spring3D(xpos, ypos, zpos){
   this.veloc = new V3.$(0,0,0);
   this.pos = new V3.$(xpos, ypos, zpos);
-  this.gravity = -0.005;
   this.spring = 2;
-  this.mass = 0.1;
-  this.stiffness = 0.2;
-  this.damping = 0.1;
   this.lookat = new M4x4.$();
 
   this.update = function(target){
@@ -180,14 +179,28 @@ function Spring3D(xpos, ypos, zpos){
       V3.scale(deltaNorm, this.spring, deltaNorm);
       V3.sub(delta, deltaNorm, delta);
 
-      V3.scale(delta,this.stiffness,force);
-      force[1] += this.gravity;
-      V3.scale(force,1/this.mass,accel);
+      V3.scale(delta,jStiffness,force);
+      force[1] += jGravity;
+      V3.scale(force,1/jMass,accel);
       V3.add(force,accel,this.veloc);
-      V3.scale(this.veloc,this.damping,this.veloc);
+      V3.scale(this.veloc,jDamping,this.veloc);
       V3.add(this.pos,this.veloc,this.pos);
 
     M4x4.makeLookAt(this.pos,target,camera.eye,this.lookat);
   };
+
+  // this.repel = function() {
+  //   force[0] = 0;
+  //   force[1] = 0;
+  //   force[2] = 0;
+
+  //   for(var i=0; i < jellyfishTargets.count; i++){
+  //     V3.sub(this.pos, jellyfishTargets[i].pos, delta);
+  //     V3.falloff(delta, falloff);
+  //     V3.add(force, delta, force);
+  //   }
+  //   V3.scale(force, 0.001, force);
+  //   V3.add(this.pos, force, this.pos);
+  // }
 
 }

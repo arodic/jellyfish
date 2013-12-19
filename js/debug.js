@@ -42,7 +42,7 @@ var jCount = 10;
 var jScale = 3;
 var jScaleRandom = 3;
 var jTurb = 0.1;
-var jSpeed = 0.01;
+var jSpeed = 0.005;
 var jRepel = 1;
 
 var jGravity = -0.005;

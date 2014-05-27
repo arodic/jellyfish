@@ -10,13 +10,11 @@
     <div id="vertex"></div>
     <div id="fragment"></div>
   </template>
-  <script>
-  (function(){
- 
+  <script> 
     Polymer('shader-template', {
         vertexScript: '',
         fragmentScript: '',
-        attributes: {
+        attribs: {
             aVertexPosition:  { type: "attribute vec3" },
             aVertexNormal:    { type: "attribute vec3" },
             aVertexColor:     { type: "attribute vec3" },
@@ -93,7 +91,7 @@
                 if (this.vertexScript.indexOf(i) != -1) {
                     chunksScript += this.$[i].innerText;
                 } else {
-                    // delete this.attributes[i];
+                    // delete this.attribs[i];
                 }
             }
             this.vertexScript = this.vertexScript.replace('##CHUNKS##', chunksScript);
@@ -103,17 +101,17 @@
                 if (this.fragmentScript.indexOf(i) != -1) {
                     chunksScript += this.$[i].innerText;
                 } else {
-                    // delete this.attributes[i];
+                    // delete this.attribs[i];
                 }
             }
             this.fragmentScript = this.fragmentScript.replace('##CHUNKS##', chunksScript);
 
             var attributesScript = "";
-            for (var i in this.attributes) {
+            for (var i in this.attribs) {
                 if (this.vertexScript.indexOf(i) != -1) {
-                    attributesScript += this.attributes[i].type + " " + i + "; ";
+                    attributesScript += this.attribs[i].type + " " + i + "; ";
                 } else {
-                    // delete this.attributes[i];
+                    // delete this.attribs[i];
                 }
             }
             this.vertexScript = this.vertexScript.replace('##ATTRIBUTES##', attributesScript);
@@ -144,6 +142,7 @@
                     // delete this.varyings[i];
                 }
             }
+
             this.vertexScript = this.vertexScript.replace('##VARYINGS##', varyingsScript);
             this.fragmentScript = this.fragmentScript.replace('##VARYINGS##', varyingsScript);
             // CREATE PROGRAM
@@ -177,7 +176,7 @@
 
             // SETUP ATTRIBUTES AND UNIFORMS
 
-            for (var i in this.attributes){
+            for (var i in this.attribs){
                 this.program[i] = gl.getAttribLocation(this.program, i);
                 gl.enableVertexAttribArray(this.program[i]);
             }
@@ -211,7 +210,5 @@
 
         }
     });
-  
-  })();
   </script>
 </polymer-element>

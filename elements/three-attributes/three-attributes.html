@@ -1,4 +1,4 @@
-<link rel="import" href="./dat-inputs.html">
+<link rel="import" href="../three-inputs/three-inputs.html">
 
 <polymer-element name="three-attribute" attributes="param min max step">
   <template>
@@ -47,12 +47,12 @@
 
       var getTag = function( object ) {
           var tag = null;
-          if ( typeof object === 'string' ) tag = 'dat-input-string';
-          else if ( typeof object === 'number' ) tag = 'dat-input-number';
-          else if ( typeof object === 'boolean' ) tag = 'dat-input-boolean';
-          else if ( object instanceof Float32Array && object.length == 2 ) tag = 'dat-input-vector2';
-          else if ( object instanceof Float32Array && object.length == 3 ) tag = 'dat-input-vector3';
-          else if ( object instanceof Float32Array && object.length == 4 ) tag = 'dat-input-vector4';
+          if ( typeof object === 'string' ) tag = 'input-string';
+          else if ( typeof object === 'number' ) tag = 'input-number';
+          else if ( typeof object === 'boolean' ) tag = 'input-boolean';
+          else if ( object instanceof Float32Array && object.length == 2 ) tag = 'input-vector2';
+          else if ( object instanceof Float32Array && object.length == 3 ) tag = 'input-vector3';
+          else if ( object instanceof Float32Array && object.length == 4 ) tag = 'input-vector4';
           return tag;
       }
 
@@ -65,17 +65,17 @@
         addInput: function( tag, model, attribute ) {
             var editor = document.createElement(tag);
             editor.id = 'input';
-            editor.bindProperty('value', model, attribute);
-            this.$.input.appendChild(editor);
-            if (this.min) editor.min = this.min;
-            if (this.max) editor.max = this.max;
-            if (this.step) editor.step = this.step;            
-            if ( tag == "dat-input-boolean" ) {
-              this.$.label.className = 'toggleable';
-              this.$.label.onclick = function() {
-                editor.toggle();
-              }
-            }
+            // editor.bindProperty('value', model, attribute);
+            // this.$.input.appendChild(editor);
+            // if (this.min) editor.min = this.min;
+            // if (this.max) editor.max = this.max;
+            // if (this.step) editor.step = this.step;            
+            // if ( tag == "input-boolean" ) {
+            //   this.$.label.className = 'toggleable';
+            //   this.$.label.onclick = function() {
+            //     editor.toggle();
+            //   }
+            // }
         },
         paramChanged: function() {
           var scope = this;

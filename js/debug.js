@@ -13,14 +13,13 @@ var uJoint0InvTranspose = new M4x4.$();
 
 var uPosition = new Float32Array([0,0,0]);
 var uScale = new Float32Array([0,0,0]);
-var uBbox = new Float32Array([80,80,80])
+var uBbox = new Float32Array([80,80,80]);
 var uAlpha = 1;
 
 var uTime = 0;
-var uShaderDebug = 0;
 
-var uFogTopCol = new Float32Array([0.7,0.8,1.1,0.75])
-var uFogBottomCol = new Float32Array([0.15,0.15,0.2,0.5])
+var uFogTopCol = new Float32Array([0.7,0.8,1.1,0.75]);
+var uFogBottomCol = new Float32Array([0.15,0.15,0.2,0.5]);
 var uFogDist = 500;
 
 var uFresnelCol = new Float32Array([0.3,0.8,1,0.6]);
@@ -66,7 +65,7 @@ var camera = {
   rotate: [-0.3,0,0],
   translate: [0,0,-280],
   eye: [0,0,-64]
-}
+};
 
 window.addEventListener('keydown', function(event){
 

@@ -28,8 +28,9 @@
 <link rel="import" href="shaders/shader-plankton.html">
 <link rel="import" href="shaders/shader-ray.html">
 
-<!-- <link rel="import" href="elements/div-sidebar/div-sidebar.html"> -->
-<!-- <link rel="import" href="elements/three-attributes/three-attributes.html"> -->
+<link rel="import" href="elements/div-sidebar/div-sidebar.html">
+<link rel="import" href="elements/div-collapsable/div-collapsable.html">
+<link rel="import" href="elements/three-attribute-editor/three-attribute-editor.html">
 
 </head>
 <body>
@@ -40,58 +41,54 @@
   <shader-ray></shader-ray>
 
   <canvas id="webgl-canvas"></canvas>
-  <!-- <div-sidebar uuid="1">
-    
-    <three-attribute param="uShaderDebug" min="0" max="9" step="1"></three-attribute>
-    <br />
-    <three-attribute param="uFogTopCol" min="0" max="1"></three-attribute>
-    <three-attribute param="uFogBottomCol" min="0" max="1"></three-attribute>
-    <three-attribute param="uFogDist" min="0" max="1000" step="1"></three-attribute>
-    <br />
-    <three-attribute param="uFresnelCol" min="0" max="1"></three-attribute>
-    <three-attribute param="uFresnelPower" min="0" max="1000" step="1"></three-attribute>
-    <br />
-    <three-attribute param="uLightPos" step="1"></three-attribute>
-    <three-attribute param="uLightCol" min="0" max="1" step="0.05"></three-attribute>
-    <three-attribute param="uLightSpecCol" min="0" max="1" step="0.05"></three-attribute>
-    <three-attribute param="uLightRadius" min="0" max="1000" step="1"></three-attribute>
-    <three-attribute param="uLightSpecPower" min="0" max="10" step="0.1"></three-attribute>
-    <three-attribute param="uAmbientCol" min="0" max="1" step="0.05"></three-attribute>
-    <br />
-    <three-attribute param="uNear" min="0" max="1"></three-attribute>
-    <three-attribute param="uFar" min="1" max="1000" step="1"></three-attribute>
-    <three-attribute param="uFov" min="0" max="180" step="1"></three-attribute>
-    <br />
-    <three-attribute param="jCount" min="0" max="100" step="1"></three-attribute>
-    <three-attribute param="jScale" min="0" max="10" step="0.1"></three-attribute>
-    <three-attribute param="jScaleRandom" min="0" max="100" srtp="0.1"></three-attribute>
-    <three-attribute param="jTurb" min="0" step="0.001"></three-attribute>
-    <three-attribute param="jSpeed" min="0" step="0.001"></three-attribute>
-    <three-attribute param="jRepel" min="0" step="0.1"></three-attribute>
-    <br />
-    <three-attribute param="jGravity" min="-1" max="1" step="0.005"></three-attribute>
-    <three-attribute param="jSpring" min="0" max="10" step="0.1"></three-attribute>
-    <three-attribute param="jMass" min="0" max="1" step="0.01"></three-attribute>
-    <three-attribute param="jStiffness" min="0" max="1" step="0.01"></three-attribute>
-    <three-attribute param="jDamping" min="0" max="1" step="0.001"></three-attribute>
-    <br />
-    <three-attribute param="uBbox" min="0" max="1000" step="1"></three-attribute>
-    <br />
-    <three-attribute param="pCount" min="0" max="1000" step="1"></three-attribute>
-    <three-attribute param="pScale" min="0" max="10" step="0.1"></three-attribute>
-    <three-attribute param="pScaleRandom" min="0" max="10" step="0.1"></three-attribute>
-    <three-attribute param="pFlow" min="-1" max="1" step="0.01"></three-attribute>
-    <three-attribute param="pTurbAmp" min="0" max="100" step="0.01"></three-attribute>
-    <three-attribute param="pTurbFreq" min="0" max="100" step="0.1"></three-attribute>
-    <br />
-    <three-attribute param="rCount" min="0" max="100" step="1"></three-attribute>
-    <three-attribute param="rSpeed" min="0" max="1" step="0.001"></three-attribute>
-
-  </div-sidebar> -->
+  <div-sidebar uuid="1">
+    <div-collapsable label="Settings" uuid="2">
+        <three-attribute-editor uuid="3" id="attributes"></three-attribute-editor>
+    </div-collapsable>
+  </div-sidebar>
   
   <script type="text/javascript">
     window.addEventListener('WebComponentsReady', function(e) {
         init();
+        var attributes = document.querySelector('#attributes');
+        attributes.model = window;
+        attributes.settings = {
+            "uShaderDebug": { min: "0", max: "9", step: "1" },
+            "uFogTopCol": { min: "0", max: "1" },
+            "uFogBottomCol": { min: "0", max: "1" },
+            "uFogDist": { min: "0", max: "1000", step: "1" },
+            "uFresnelCol": { min: "0", max: "1" },
+            "uFresnelPower": { min: "0", max: "1000", step: "1" },
+            "uLightPos": { step: "1" },
+            "uLightCol": { min: "0", max: "1", step: "0.05" },
+            "uLightSpecCol": { min: "0", max: "1", step: "0.05" },
+            "uLightRadius": { min: "0", max: "1000", step: "1" },
+            "uLightSpecPower": { min: "0", max: "10", step: "0.1" },
+            "uAmbientCol": { min: "0", max: "1", step: "0.05" },
+            "uNear": { min: "0", max: "1" },
+            "uFar": { min: "1", max: "1000", step: "1" },
+            "uFov": { min: "0", max: "180", step: "1" },
+            "jCount": { min: "0", max: "100", step: "1" },
+            "jScale": { min: "0", max: "10", step: "0.1" },
+            "jScaleRandom": { min: "0", max: "100", step: "0.1" },
+            "jTurb": { min: "0", step: "0.001" },
+            "jSpeed": { min: "0", step: "0.001" },
+            "jRepel": { min: "0", step: "0.1" },
+            "jGravity": { min: "-1", max: "1", step: "0.005" },
+            "jSpring": { min: "0", max: "10", step: "0.1" },
+            "jMass": { min: "0", max: "1", step: "0.01" },
+            "jStiffness": { min: "0", max: "1", step: "0.01" },
+            "jDamping": { min: "0", max: "1", step: "0.001" },
+            "uBbox": { min: "0", max: "1000", step: "1" },
+            "pCount": { min: "0", max: "1000", step: "1" },
+            "pScale": { min: "0", max: "10", step: "0.1" },
+            "pScaleRandom": { min: "0", max: "10", step: "0.1" },
+            "pFlow": { min: "-1", max: "1", step: "0.01" },
+            "pTurbAmp": { min: "0", max: "100", step: "0.01" },
+            "pTurbFreq": { min: "0", max: "100", step: "0.1" },
+            "rCount": { min: "0", max: "100", step: "1" },
+            "rSpeed": { min: "0", max: "1", step: "0.001" },
+        };
     });
   </script>
 

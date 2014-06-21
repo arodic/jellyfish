@@ -1,0 +1,22 @@
+<link rel="import" href="../input-array/input-array.html">
+<link rel="import" href="../input-slider/input-slider.html">
+<polymer-element name="input-rgb" attributes="value width editable" extends="input-array">>
+  <template>
+    <link href="input-rgb.css" rel="stylesheet" type="text/css">
+    <span id="swatch"><input type="color" id="picker" value="{{hexValue}}">&nbsp;</span><input-slider min="0"
+      max="1"
+      editable="{{editable}}"
+      width="{{sliderWidth}}"
+      class="slider" id="a0">
+      </input-slider><input-slider min="0" max="1"
+      editable="{{editable}}"
+      width="{{sliderWidth}}"
+      class="slider" id="a1">
+      </input-slider><input-slider min="0" max="1"
+      editable="{{editable}}"
+      width="{{sliderWidth}}"
+      class="slider" id="a2">
+    </input-slider>
+  </template>
+  <script type="text/javascript" src="input-rgb.js"></script>
+</polymer-element>

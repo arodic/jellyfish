@@ -1,0 +1,23 @@
+{
+  "name": "input-array",
+  "version": "0.2.4",
+  "homepage": "https://github.com/arodic/input-array",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Custom input element for numerical array data type.",
+  "main": "input-array.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "array",
+    "matrix"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "input-number": "~0.2.4"
+  }
+}

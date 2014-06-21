@@ -1,0 +1,26 @@
+:host {
+  display: inline-block;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  position: relative;
+  background: gray;
+  cursor: ew-resize;
+}
+
+:host #innerContent {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+:host #value {
+  display: inline-block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+}

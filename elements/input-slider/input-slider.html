@@ -1,0 +1,18 @@
+<script>
+  (function() {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    var css = 'body.ew-resize {cursor: ew-resize}\n';
+    css += 'body.ew-resize * {cursor: ew-resize}';
+    style.appendChild(document.createTextNode(css));
+    document.getElementsByTagName('head')[0].appendChild(style);
+  })();
+</script>
+
+<polymer-element name="input-slider" attributes="value min max step log width height editable">
+  <template>
+    <link href="input-slider.css" rel="stylesheet" type="text/css">
+    &nbsp;<span id="value">&nbsp;</span><div id="innerContent"><content></content></div>
+  </template>
+  <script type="text/javascript" src="input-slider.js"></script>
+</polymer-element>

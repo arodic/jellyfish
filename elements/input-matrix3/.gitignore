@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+node_modules/
+gh-pages/
+.grunt
+||||||| merged common ancestors
+=======
+node_modules/
+master/
+gh-pages/
+.grunt
+>>>>>>> 846701b4fe2376a3b62fcdcae77aeb8f8a875d9e

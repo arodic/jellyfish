@@ -1,0 +1,24 @@
+{
+  "name": "input-rgba",
+  "version": "0.2.4",
+  "homepage": "https://github.com/arodic/input-rgba",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Custom input element for rgba data type.",
+  "main": "input-rgba.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "rgba",
+    "color"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "input-slider": "~0.2.4",
+    "input-array": "~0.2.4"
+  }
+}

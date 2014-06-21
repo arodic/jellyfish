@@ -1,0 +1,23 @@
+{
+  "name": "input-vector2",
+  "version": "0.2.4",
+  "homepage": "https://github.com/arodic/input-vector2",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Custom input element for vector2 data type.",
+  "main": "input-vector2.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "vector2",
+    "vector"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "input-array": "~0.2.4"
+  }
+}

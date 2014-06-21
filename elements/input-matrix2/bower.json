@@ -1,0 +1,23 @@
+{
+  "name": "input-matrix2",
+  "version": "0.2.4",
+  "homepage": "https://github.com/arodic/input-matrix2",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Custom input element for matrix2 data type.",
+  "main": "input-matrix2.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "matrix2",
+    "matrix"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "input-array": "~0.2.4"
+  }
+}

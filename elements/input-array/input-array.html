@@ -1,9 +1,0 @@
-<link rel="import" href="../input-number/input-number.html">
-
-<polymer-element name="input-array" attributes="value min max step editable width">
-  <template>
-    <link href="../input-array/input-array.css" rel="stylesheet" type="text/css">
-    [<template repeat="{{elem, i in value}}"><input-number min="{{min}}" max="{{max}}" step="{{step}}" toDeg="{{toDeg}}" editable="{{editable}}" id="a{{i}}" value="{{elem}}"></input-number>{{i < value.length - 1? ',' : ''}}</template>]
-  </template>
-  <script type="text/javascript" src="input-array.js"></script>
-</polymer-element>

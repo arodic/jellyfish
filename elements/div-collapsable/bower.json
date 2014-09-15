@@ -1,0 +1,24 @@
+{
+  "name": "div-collapsable",
+  "version": "0.3.1",
+  "homepage": "https://arodic.github.com/components/div-collapsable",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Collapsable div custom element with expand/collapse labeled header.",
+  "main": "div-collapsable.html",
+  "keywords": [
+    "collapsable",
+    "threejs",
+    "ui",
+    "polymer",
+    "polymerjs",
+    "web-components",
+    "div-collapsable"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "input-boolean-icon": "~0.3.1"
+  }
+}

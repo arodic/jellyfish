@@ -1,0 +1,24 @@
+{
+  "name": "input-boolean-icon",
+  "version": "0.3.1",
+  "homepage": "https://arodic.github.com/components/input-boolean-icon",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Simple input element for boolean data type.",
+  "main": "input-boolean-icon.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "boolean"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "core-icons": "Polymer/core-icons#master",
+    "input-boolean": "~0.3.1"
+  }
+}

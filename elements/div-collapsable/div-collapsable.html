@@ -1,0 +1,128 @@
+<!--
+Copyright (c) 2014 Aleksandar Rodic @arodic
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+
+The `div-collapsable` is a simple collapsable DOM element with a labeled header.
+
+Example:
+
+    <div-collapsable expanded="false" label="Group1"></div-collapsable>
+
+Renders something like this:
+
+    ► Group1
+
+@element div-collapsable
+@homepage http://arodic.github.com/components/components/div-collapsable/
+@demo http://arodic.github.com/components/components/div-collapsable/demo.html
+@blurb Simple collapsable DOM element with a labeled header.
+@status alpha
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../input-boolean-icon/input-boolean-icon.html">
+
+<polymer-element name="div-collapsable" attributes="expanded uuid label">
+  <template>
+    <style type="text/css">
+      :host {
+        display: block;
+      }
+      :host > #content:not(.expanded) {
+        visibility: hidden;
+        position: absolute;
+      }
+      :host > #header > #label {
+        vertical-align: middle;
+      }
+    </style>
+    <div id="header" style="text-align:{{otherside}}">
+      <input-boolean-icon
+        value="{{expanded}}" trueIcon="expand-more" falseIcon="chevron-right"><span id="label">{{label}}</span>
+      </input-boolean-icon>
+    </div>
+    <div id="content"><content></content></div>
+  </template>
+  <script type="text/javascript">
+
+    /**
+     * Fired when collapsable is expanded.
+     * 
+     * @event div-expanded
+     * @param {Object} detail
+     * @param {Object} detail.div the element
+     */
+
+    /**
+     * Fired when collapsable is collapsed.
+     * 
+     * @event div-collapsed
+     * @param {Object} detail
+     * @param {Object} detail.div the element
+     */
+    
+    Polymer({
+
+      /**
+       * Element label displayed on the header.
+       *
+       * @attribute label
+       * @type string
+       * @default 'no label'
+       */
+      label: 'no label',
+      
+      /**
+       * State of the element (Expanded/Collapsed)
+       *
+       * @attribute expanded
+       * @type boolean
+       * @default false
+       */
+      expanded: false,
+
+      /**
+       * Unique ID for the element. Used to remember the state of the element.
+       *
+       * @attribute uuid
+       * @type string
+       * @default ''
+       */
+      uuid: '',
+
+      ready: function() {
+        if (this.uuid) {
+          if (localStorage[this.uuid+'expanded'] == 'true') this.expanded = true;
+          if (localStorage[this.uuid+'expanded'] == 'false') this.expanded = false;
+        }
+        this.expandedChanged();
+      },
+      uuidChanged: function() {
+        this.ready();
+      },
+      expandedChanged: function() {
+        this.$.content.classList.toggle('expanded', this.expanded);
+        if (this.expanded) {
+          this.fire('div-expanded', {div: this});
+        } else {
+          this.fire('div-collapsed', {div: this});
+        }
+        if (this.uuid) localStorage[this.uuid+'expanded'] = this.expanded;
+      }
+    });
+  </script>
+</polymer-element>

@@ -1,5 +1,5 @@
 function compileShader(shaderName, gl) {
-  var shader = document.querySelector(shaderName); 
+  var shader = document.querySelector(shaderName);
   shader.compile(gl);
   return shader;
 }

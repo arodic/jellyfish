@@ -1,0 +1,133 @@
+<!--
+Copyright (c) 2014 Aleksandar Rodic @arodic
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+
+The `div-sidebar` is a simple sidebar DOM element with a labeled footer.
+
+Example:
+
+    <div-sidebar expanded="false"></div-sidebar>
+
+@element div-sidebar
+@homepage http://arodic.github.com/components/div-sidebar/
+@demo http://arodic.github.com/components/div-sidebar/demo.html
+@blurb Simple sidebar DOM element with a labeled footer.
+@status alpha
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../div-collapsable/div-collapsable.html">
+
+<polymer-element name="div-sidebar" attributes="expanded width uuid" extends="div-collapsable" vertical layout>
+  <template>
+    <style type="text/css">
+      :host {
+        display: block;
+      }
+      :host > #content {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      :host > #footer {
+        display: block;
+        width: 100%;
+        visibility: visible;
+      }
+      :host(.left) > #footer {
+        text-align: right;
+      }
+      :host > #footer {
+        cursor: pointer;
+      }
+    </style>
+    <div id="content" flex>
+      <template if="{{expanded}}">
+        <content></content>
+      </template>
+      <template if="{{!expanded}}">
+        <content select=".collapsed"></content>
+      </template>
+    </div>
+    <div id="footer" style="text-align:{{otherside}}">
+      <input-boolean-icon value="{{expanded}}" trueIcon="clear" falseIcon="menu"></input-boolean-icon>
+    </div>
+  </template>
+  <script type="text/javascript">
+
+    /**
+     * Fired when sidebar is expanded.
+     * 
+     * @event div-expanded
+     * @param {Object} detail
+     * @param {Object} detail.div the element
+     */
+
+    /**
+     * Fired when sidebar is collapsed.
+     * 
+     * @event div-collapsed
+     * @param {Object} detail
+     * @param {Object} detail.div the element
+     */
+
+    Polymer({
+
+      /**
+       * State of the element (Expanded/Collapsed)
+       *
+       * @attribute expanded
+       * @type boolean
+       * @default false
+       */
+      expanded: false,
+
+      /**
+       * Sidebar width in pixels
+       *
+       * @attribute width
+       * @type number
+       * @default 300
+       */
+      width: 300,
+
+      /**
+       * Unique ID for the element. Used to remember the state of the element.
+       *
+       * @attribute uuid
+       * @type string
+       * @default ''
+       */
+      uuid: '',
+
+      ready: function() {
+        this.super();
+        this.style.width = this.width+'px';
+      },
+      domReady: function() {
+        this.expandedChanged();
+      },
+      expandedChanged: function() {
+        this.super();
+        if (this.expanded) {
+          this.style.width = this.width+'px';
+        } else {
+          this.style.width = 'auto';
+        }
+      }
+    });
+  </script>
+</polymer-element>

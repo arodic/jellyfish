@@ -1,0 +1,31 @@
+{
+  "name": "input-boolean",
+  "version": "0.3.1",
+  "homepage": "https://arodic.github.com/components/input-boolean",
+  "authors": [
+    "Aleksandar Rodic <aleksandar.xyz@gmail.com>"
+  ],
+  "description": "Simple input element for boolean data type.",
+  "main": "input-boolean.html",
+  "keywords": [
+    "input",
+    "field",
+    "polymer",
+    "web-components",
+    "UI",
+    "boolean"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "_release": "0.3.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.3.1",
+    "commit": "c9d61d37d45725849f0866518b5a6fab8b8577c5"
+  },
+  "_source": "git://github.com/arodic/input-boolean.git",
+  "_target": "~0.3.1",
+  "_originalSource": "input-boolean"
+}

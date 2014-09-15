@@ -1,0 +1,118 @@
+<!--
+Copyright (c) 2014 Aleksandar Rodic @arodic
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+
+The `input-boolean-icon` is a simple input element for boolean data type. It is a replacement for checkbox element. The element value is displayed as icon.
+
+Example:
+
+    <input-boolean-icon value="true" trueIcon="done-all" falseIcon="done"></input-boolean-icon>
+
+__Note__: When you tab-focus this element you can use enter and spacebar keys to toggle the value.
+
+@group three-inputs
+@element input-boolean-icon
+@homepage http://arodic.github.com/components/input-boolean-icon/
+@demo http://arodic.github.com/components/input-boolean-icon/demo.html
+@blurb Simple input element for boolean data type.
+@status alpha
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../input-boolean/input-boolean.html">
+
+<polymer-element name="input-boolean-icon" attributes="value editable trueIcon falseIcon" extends="input-boolean">
+  <template>
+    <style type="text/css">
+      :host {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        touch-action: none;
+        display: block;
+        vertical-align: top;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      :host > #value {
+        /*vertical-align: top;*/
+        /*width: 1.386em;*/
+        /*height: 1.386em;*/
+      }
+      :host > #value:focus {
+        outline: 0;
+        background: rgba(0,0,0,0.25);
+        color: rgba(255,255,255,1);
+      }
+    </style>
+    <core-icon id="value" icon="{{value ? trueIcon : falseIcon}}"></core-icon><content></content>
+  </template>
+  <script type="text/javascript">
+
+    /**
+     * Fired when an value attribute is changed by a user action
+     *
+     * @event input-changed
+     * @param {Object} detail
+     * @param {Object} detail.input the input element
+     */
+
+    Polymer({
+
+      /**
+       * Input value.
+       *
+       * @attribute value
+       * @type boolean
+       * @default false
+       */
+      value: false,
+
+      /**
+       * Determines if the input can be edited by user action.
+       *
+       * @attribute editable
+       * @type boolean
+       * @default true
+       */
+      editable: true,
+
+      /**
+       * String to display when value is true.
+       *
+       * @attribute trueIcon
+       * @type string
+       * @default 'check-box-outline'
+       */
+      trueIcon: 'check-box-outline',
+      
+      /**
+       * String to display when value is false.
+       *
+       * @attribute falseIcon
+       * @type string
+       * @default 'check-box-outline-blank'
+       */
+      falseIcon: 'check-box-outline-blank'
+
+    });
+
+  </script>
+</polymer-element>

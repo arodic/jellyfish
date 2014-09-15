@@ -1,0 +1,153 @@
+<!--
+Copyright (c) 2014 Aleksandar Rodic @arodic
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+
+The `input-boolean` is a simple input element for boolean data type. It is a replacement for checkbox element. The element value is displayed as text.
+
+Example:
+
+    <input-boolean value="true" trueStr="Maybe" falseStr="I don't think so"></input-boolean>
+
+Renders something like this:
+
+    Maybe
+
+__Note__: When you tab-focus this element you can use enter and spacebar keys to toggle the value.
+
+@group three-inputs
+@element input-boolean
+@homepage http://arodic.github.com/components/input-boolean/
+@demo http://arodic.github.com/components/input-boolean/demo.html
+@blurb Simple input element for boolean data type.
+@status alpha
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="input-boolean" attributes="value editable trueStr falseStr">
+  <template>
+    <style type="text/css">
+      :host {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        touch-action: none;
+        display: block;
+        vertical-align: top;
+        overflow-x: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      :host > #value:focus {
+        outline: 0;
+        background: rgba(0,0,0,0.25);
+        color: rgba(255,255,255,1);
+      }
+    </style>
+    <span id="value">{{value ? trueStr : falseStr}}</span>
+  </template>
+  <script type="text/javascript">
+
+    /**
+     * Fired when an value attribute is changed by a user action
+     *
+     * @event input-changed
+     * @param {Object} detail
+     * @param {Object} detail.input the input element
+     */
+
+    (function() {
+
+    var validKeys = [13, 32]; // enter, spacebar
+
+    Polymer({
+
+      /**
+       * Input value.
+       *
+       * @attribute value
+       * @type boolean
+       * @default false
+       */
+      value: false,
+
+      /**
+       * Determines if the input can be edited by user action.
+       *
+       * @attribute editable
+       * @type boolean
+       * @default true
+       */
+      editable: true,
+
+      /**
+       * String to display when value is true.
+       *
+       * @attribute trueStr
+       * @type string
+       * @default 'true'
+       */
+      trueStr: 'true',
+      
+      /**
+       * String to display when value is false.
+       *
+       * @attribute falseStr
+       * @type string
+       * @default 'false'
+       */
+      falseStr: 'false',
+
+      ready: function() {
+        this.$.value.setAttribute('tabindex', 0);
+
+        this._onKeydown = this.onKeydown.bind(this);
+        this._onClick = this.onClick.bind(this);
+        this._onClick = this.onClick.bind(this);
+
+        this.$.value.addEventListener('keydown', this._onKeydown, false);
+        this.addEventListener('touchstart', this._onClick, false);
+        this.addEventListener('mousedown', this._onClick, false);
+      },
+      onClick: function(event) {
+        if (!this.editable) return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.toggle();
+      },
+      onKeydown: function(event) {
+        if (!this.editable || validKeys.indexOf(event.which) == -1) {
+          return;
+        }
+        event.preventDefault();
+        this.toggle();
+      },
+      /**
+       * Toggles the value.
+       *
+       * @method toggle
+       */
+      toggle: function() {
+        this.value = !this.value;
+        this.fire('input-changed', { input: this });
+      }
+    });
+
+    })();
+  </script>
+</polymer-element>

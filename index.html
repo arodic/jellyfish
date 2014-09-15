@@ -1,3 +1,4 @@
+<!doctype html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WebGL Jellyfish - Fourth Wall Demo</title>
 <link href="css/style.css" rel="stylesheet" type="text/css">
@@ -28,9 +29,9 @@
 <link rel="import" href="shaders/shader-plankton.html">
 <link rel="import" href="shaders/shader-ray.html">
 
-<link rel="import" href="elements/div-sidebar/div-sidebar.html">
-<link rel="import" href="elements/div-collapsable/div-collapsable.html">
-<link rel="import" href="elements/three-attribute-editor/three-attribute-editor.html">
+<!-- <link rel="import" href="elements/div-sidebar/div-sidebar.html"> -->
+<!-- <link rel="import" href="elements/div-collapsable/div-collapsable.html"> -->
+<!-- <link rel="import" href="elements/three-attribute-editor/three-attribute-editor.html"> -->
 
 </head>
 <body>
@@ -41,56 +42,56 @@
   <shader-ray></shader-ray>
 
   <canvas id="webgl-canvas"></canvas>
-  <div-sidebar uuid="1">
-    <div-collapsable label="Settings" uuid="2">
-        <three-attribute-editor uuid="3" id="attributes"></three-attribute-editor>
-    </div-collapsable>
-  </div-sidebar>
-  
-  <script type="text/javascript">
-    window.addEventListener('WebComponentsReady', function(e) {
-        init();
-        var attributes = document.querySelector('#attributes');
-        attributes.model = window;
-        attributes.settings = {
-            "uShaderDebug": { min: "0", max: "9", step: "1" },
-            "uFogTopCol": { min: "0", max: "1" },
-            "uFogBottomCol": { min: "0", max: "1" },
-            "uFogDist": { min: "0", max: "1000", step: "1" },
-            "uFresnelCol": { min: "0", max: "1" },
-            "uFresnelPower": { min: "0", max: "1000", step: "1" },
-            "uLightPos": { step: "1" },
-            "uLightCol": { min: "0", max: "1", step: "0.05" },
-            "uLightSpecCol": { min: "0", max: "1", step: "0.05" },
-            "uLightRadius": { min: "0", max: "1000", step: "1" },
-            "uLightSpecPower": { min: "0", max: "10", step: "0.1" },
-            "uAmbientCol": { min: "0", max: "1", step: "0.05" },
-            "uNear": { min: "0", max: "1" },
-            "uFar": { min: "1", max: "1000", step: "1" },
-            "uFov": { min: "0", max: "180", step: "1" },
-            "jCount": { min: "0", max: "100", step: "1" },
-            "jScale": { min: "0", max: "10", step: "0.1" },
-            "jScaleRandom": { min: "0", max: "100", step: "0.1" },
-            "jTurb": { min: "0", step: "0.001" },
-            "jSpeed": { min: "0", step: "0.001" },
-            "jRepel": { min: "0", step: "0.1" },
-            "jGravity": { min: "-1", max: "1", step: "0.005" },
-            "jSpring": { min: "0", max: "10", step: "0.1" },
-            "jMass": { min: "0", max: "1", step: "0.01" },
-            "jStiffness": { min: "0", max: "1", step: "0.01" },
-            "jDamping": { min: "0", max: "1", step: "0.001" },
-            "uBbox": { min: "0", max: "1000", step: "1" },
-            "pCount": { min: "0", max: "1000", step: "1" },
-            "pScale": { min: "0", max: "10", step: "0.1" },
-            "pScaleRandom": { min: "0", max: "10", step: "0.1" },
-            "pFlow": { min: "-1", max: "1", step: "0.01" },
-            "pTurbAmp": { min: "0", max: "100", step: "0.01" },
-            "pTurbFreq": { min: "0", max: "100", step: "0.1" },
-            "rCount": { min: "0", max: "100", step: "1" },
-            "rSpeed": { min: "0", max: "1", step: "0.001" },
-        };
-    });
-  </script>
+  <!-- <div-sidebar uuid="1"> -->
+    <!-- <div-collapsable label="Settings" uuid="2"> -->
+        <!-- <three-attribute-editor uuid="3" id="attributes"></three-attribute-editor> -->
+    <!-- </div-collapsable> -->
+  <!-- </div-sidebar> -->
+
+<script type="text/javascript">
+  window.addEventListener('WebComponentsReady', function(e) {
+      init();
+      // var attributes = document.querySelector('#attributes');
+      // attributes.model = window;
+      // attributes.settings = {
+      //     "uShaderDebug": { min: "0", max: "9", step: "1" },
+      //     "uFogTopCol": { min: "0", max: "1" },
+      //     "uFogBottomCol": { min: "0", max: "1" },
+      //     "uFogDist": { min: "0", max: "1000", step: "1" },
+      //     "uFresnelCol": { min: "0", max: "1" },
+      //     "uFresnelPower": { min: "0", max: "1000", step: "1" },
+      //     "uLightPos": { step: "1" },
+      //     "uLightCol": { min: "0", max: "1", step: "0.05" },
+      //     "uLightSpecCol": { min: "0", max: "1", step: "0.05" },
+      //     "uLightRadius": { min: "0", max: "1000", step: "1" },
+      //     "uLightSpecPower": { min: "0", max: "10", step: "0.1" },
+      //     "uAmbientCol": { min: "0", max: "1", step: "0.05" },
+      //     "uNear": { min: "0", max: "1" },
+      //     "uFar": { min: "1", max: "1000", step: "1" },
+      //     "uFov": { min: "0", max: "180", step: "1" },
+      //     "jCount": { min: "0", max: "100", step: "1" },
+      //     "jScale": { min: "0", max: "10", step: "0.1" },
+      //     "jScaleRandom": { min: "0", max: "100", step: "0.1" },
+      //     "jTurb": { min: "0", step: "0.001" },
+      //     "jSpeed": { min: "0", step: "0.001" },
+      //     "jRepel": { min: "0", step: "0.1" },
+      //     "jGravity": { min: "-1", max: "1", step: "0.005" },
+      //     "jSpring": { min: "0", max: "10", step: "0.1" },
+      //     "jMass": { min: "0", max: "1", step: "0.01" },
+      //     "jStiffness": { min: "0", max: "1", step: "0.01" },
+      //     "jDamping": { min: "0", max: "1", step: "0.001" },
+      //     "uBbox": { min: "0", max: "1000", step: "1" },
+      //     "pCount": { min: "0", max: "1000", step: "1" },
+      //     "pScale": { min: "0", max: "10", step: "0.1" },
+      //     "pScaleRandom": { min: "0", max: "10", step: "0.1" },
+      //     "pFlow": { min: "-1", max: "1", step: "0.01" },
+      //     "pTurbAmp": { min: "0", max: "100", step: "0.01" },
+      //     "pTurbFreq": { min: "0", max: "100", step: "0.1" },
+      //     "rCount": { min: "0", max: "100", step: "1" },
+      //     "rSpeed": { min: "0", max: "1", step: "0.001" },
+      // };
+  });
+</script>
 
 </body>
 </html>

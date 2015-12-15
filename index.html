@@ -20,7 +20,7 @@
 
 
 <script id="jellyfish-vs" type="x-shader/x-vertex">
-precision mediump float;
+precision highp float;
 
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
@@ -33,8 +33,6 @@ uniform mat4 uViewInv;
 uniform mat4 uWorldView;
 uniform mat4 uWorldViewProj;
 
-uniform float uCurrentTime;
-
 uniform mat4 uJoint0;
 uniform mat4 uJoint1;
 uniform mat4 uJoint2;
@@ -43,11 +41,11 @@ uniform mat4 uJoint0InvTranspose;
 
 uniform float uCurrentJellyfishTime;
 
-varying vec4 vWorld;
+varying mediump vec4 vWorld;
 
-varying vec3 vTextureCoord;
-varying vec3 vDiffuse;
-varying vec3 vFresnel;
+varying mediump vec3 vTextureCoord;
+varying mediump vec3 vDiffuse;
+varying mediump vec3 vFresnel;
 
 
 void main(void) {

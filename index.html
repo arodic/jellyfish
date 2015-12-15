@@ -18,6 +18,13 @@
 <script type="text/javascript" src="js/drawJellyfish.js"></script>
 <script type="text/javascript" src="js/drawScene.js"></script>
 
+<style>
+body {
+  font-family:  'Monda', sans-serif;
+  margin: 0;
+  overflow: hidden;
+}
+</style>
 
 <script id="jellyfish-vs" type="x-shader/x-vertex">
 precision highp float;
@@ -98,7 +105,11 @@ void main(void) {
 </script>
 
 <script id="jellyfish-fs" type="x-shader/x-fragment">
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 
 uniform sampler2D uSampler0;
 uniform sampler2D uSampler1;

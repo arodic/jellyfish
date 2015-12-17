@@ -105,11 +105,7 @@ void main(void) {
 </script>
 
 <script id="jellyfish-fs" type="x-shader/x-fragment">
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
 precision mediump float;
-#endif
 
 uniform sampler2D uSampler0;
 uniform sampler2D uSampler1;
@@ -140,9 +136,9 @@ $(document).ready(function(){
 </head>
 <body>
     <div id="statusBar">
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://aleksandarrodic.com/p/jellyfish/" data-text="Interact with beautiful jellyfish in your browser!" data-via="xyz_ak" data-hashtags="WebGL">Tweet</a>
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://akirodic.com/p/jellyfish/" data-text="Interact with beautiful jellyfish in your browser!" data-via="akirodic" data-hashtags="WebGL">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<a href="https://twitter.com/xyz_ak" class="twitter-follow-button" data-show-count="false">Follow @xyz_ak</a>
+<a href="https://twitter.com/akirodic" class="twitter-follow-button" data-show-count="false">Follow @akirodic</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
     <div id="console">
@@ -163,18 +159,13 @@ $(document).ready(function(){
     </div>
     <canvas id="webgl-canvas"></canvas>
 
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-258449-15']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-68216254-1', 'auto');
+      ga('send', 'pageview');
     </script>
 
 </body>
